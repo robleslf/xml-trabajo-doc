@@ -1,0 +1,515 @@
+== Transformación de documentos XML
+
+=== CSS
+
+CSS (Cascading Style Sheets) es un lenguaje de hojas de estilo utilizado para describir la presentación y el formato de un documento HTML (HyperText Markup Language). En otras palabras, CSS se utiliza para controlar la apariencia visual de una página web o aplicación web, separando la estructura y el contenido del diseño y la presentación.
+
+En un mismo documento XML se pueden tener varios CSS. y así estar formateado de diferentes formas, según nuestros propósitos o del posible uso que se le vaya a dar al documento.
+
+Las CSS se expresan mediante una serie de reglas que se guardan en un fichero de texto con la extensión .css, que puede estar localizado junto al documento XML o en cualquier sitio en la nube.
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE biblioteca SYSTEM "biblioteca.dtd">
+<biblioteca>
+  <libro>Bailando con lobos</libro>
+</biblioteca>
+----
+
+[source, css]
+----
+libro {
+  border: 1px solid #ccc;
+  margin: 10px;
+  padding: 10px;
+}
+----
+====
+
+
+=== Incluir un fichero CSS en el documento XML
+
+Para ello debemos seguir la siguiente sintaxis:
+
+[source, xml]
+----
+<?xml-stylesheet href="fichero.css" type="text/css"?>
+----
+
+
+- *xml-stylesheet:* se utiliza para indicar que se está definiendo una hoja de estilo.
+
+- *href="fichero.css":* especifica la ubicación relativa o absoluta del archivo CSS que se aplicará al documento XML. En este caso, "fichero.css" es el nombre del archivo CSS externo.
+
+- *type="text/css":* especifica el tipo de contenido del archivo de estilo, que en este caso es "text/css".
+
+=== Reglas de estilo
+
+Estas reglas se componen de un selector (normalmente el nombre de una etiqueta de nuestro documento XML) y una lista o cadena de estilos.
+
+[source, css]
+----
+selector {
+  propiedad1: valor1;
+  propiedad2: valor2;
+  /* ... más propiedades y valores ... */
+}
+----
+
+Normalmente el selector es simplemente el nombre de la etiqueta a la que se refiere la regla:
+
+[EXAMPLE]
+====
+[source, css]
+----
+libro {
+  background-color: lightyellow;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+----
+====
+
+==== Agrupación de selectores
+
+Se pueden agrupar selectores para aplicar el mismo conjunto de estilos a múltiples elementos. Se realiza mediante una lista de los nombres de las reglas separadas por comas:
+
+[EXAMPLE]
+====
+[source, css]
+----
+h1, h2, h3 {
+  color: blue;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+----
+====
+
+=== Pseudo-elementos
+
+Son partes ficticias de un documento HTML o XML que permiten aplicar estilos a elementos específicos de un selector sin tener que agregar elementos adicionales al código fuente.
+Entre ellos están *first-letter* y *first-line*:
+
+[EXAMPLE]
+====
+[source, css]
+----
+texto {
+  color: blue;
+  font-size: 24px;
+  font-weight: bold;
+}
+de,a : {display: block; color: red}
+
+de: first-letter : {color: green}
+
+texto {color: black}
+----
+
+La primera letra del contenido del elemento _de_ estará en color verde; la primer alínea del _texto_ irá en negro
+====
+
+
+=== Unidades de medida CSS
+Se utilizan para especificar valores numéricos que se aplican a propiedades, como el tamaño de fuente, el ancho, el alto, los márgenes, los bordes y otros aspectos visuales. Permiten definir dimensiones concretas y proporcionales en relación con diferentes referencias, como la pantalla, el contenido o el espacio disponible. Se clasifican en:
+
+* **Unidades Absolutas:*
+
+- px (píxeles): representa un píxel en la pantalla.
+
+- pt (puntos): utilizada principalmente para tamaños de fuente en impresión. 1 punto equivale a 1/72 de pulgada.
+
+- cm (centímetros), mm (milímetros), in (pulgadas): Unidades de medida que se basan en medidas físicas del mundo real.
+
+* *Unidades Relativas:*
+
+- % (porcentaje): se basa en un porcentaje de algún valor base, como el ancho o el alto del contenedor padre.
+
+- em: se basa en el tamaño de fuente del elemento. 1em es igual al tamaño de fuente actual.
+
+- rem: se basa en el tamaño de fuente del elemento raíz (normalmente el <html>).
+
+- vh (viewport height): Representa un porcentaje del alto de la ventana gráfica.
+
+- vw (viewport width): Representa un porcentaje del ancho de la ventana gráfica.
+
+=== Notaciones de color
+
+Existen diferentes notaciones:
+
+* *Notación Hexadecimal:* se basa en el sistema numérico hexadecimal, que utiliza valores de 0 a 15 representados por los dígitos 0-9 y las letras A-F. En CSS, se utiliza para representar los valores de los componentes rojo, verde y azul (RGB) de un color. Cada componente se representa por un par de dígitos hexadecimales que van desde 00 (sin intensidad) hasta FF (máxima intensidad).
+
+[EXAMPLE]
+====
+#FF0000 representa el color rojo puro.
+#00FF00 representa el color verde puro.
+#0000FF representa el color azul puro.
+====
+
+* *Notación Hexadecimal Abreviada:* es una versión más compacta de la notación hexadecimal. Si los dos dígitos hexadecimales que representan cada componente son iguales, se pueden abreviar dejando solo un dígito. Esto es común cuando todos los componentes tienen la misma intensidad.
+
+[EXAMPLE]
+====
+#FF0000 puede abreviarse como #F00 (rojo puro).
+#00FF00 puede abreviarse como #0F0 (verde puro).
+#0000FF puede abreviarse como #00F (azul puro).
+====
+
+* *Notación RGB:* representa los colores en términos de los valores de los componentes rojo, verde y azul (RGB) en una escala de 0 a 255. Se utiliza el formato rgb(r, g, b) donde r, g y b son valores numéricos que indican la intensidad de cada componente. Por ejemplo, rgb(255, 0, 0) representa el color rojo puro.
+
+* *Notación de Nombre de Color:* CSS también admite un conjunto predefinido de nombres de color en inglés. Por ejemplo, red, green, blue, black, white, entre otros. Sin embargo, esta notación tiene limitaciones en cuanto a la gama de colores disponibles.
+
+=== Clases
+
+Son identificadores que se utilizan para aplicar estilos específicos a uno o varios elementos HTML. Las clases son una forma de seleccionar elementos para aplicarles estilos sin depender de la estructura del documento o de los nombres de las etiquetas. 
+
+Definir una Clase:
+
+[source, css]
+----
+.nombdre_de_clase {
+  atributo: valor;
+  atributo2: valor2;
+}
+----
+
+Posteriormente, en el documento XML se ha de hacer referencia a dicha clase utilizando el atributo *class* con esta sintaxis:
+
+[source, xml]
+----
+<ETIQUETA class="nombre_de_clase">
+----
+
+[EXAMPLE]
+====
+[source, css]
+----
+.resaltado{color: blue; background-color: yellow; font-weight: bold;}
+----
+
+[source, XML]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="ejemplo.css" type="text/css"?>
+<mensaje>
+  <de class="resaltado">Jose Solana</de>
+  <a class="resaltado">Andrea Nuñez</a>
+  <asunto>Preguntamos por la salud!</asunto>
+  <texto>
+    Hola Andrea,
+    ...
+    Adios, Andrea
+  </texto>
+</mensaje>
+----
+====
+
+
+En algunas ocasiones es posible que se desee seleccionar un único elemento para asignar un estilo especial; en este caso es posible seleccionarlo mediante el atributo ID con la siguiente sintaxis:
+
+[source, css]
+----
+#nombredelaclase {atributo: valor; atributo2: valor2;}
+----
+
+Posteriormente, en el documento, se hace referencia a dicha clase utilizando el atributo ID con la siguiente sintaxis:
+
+[source, xml]
+----
+<ETIQUETA ID="nombredelaclase">
+----
+
+[NOTE]
+====
+Los identificadores son únicos y solo se pueden usar una sola vez en un mismo documento.
+====
+
+[EXAMPLE]
+====
+[source, css]
+----
+texto {color: green;}
+#resaltado{color: blue; background-color: yellow; font-weight: bold;}
+----
+
+[source, XML]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="ejemplo.css" type="text/css"?>
+<mensaje>
+  <de>Jose Solana</de>
+  <a ID="resaltado">Andrea Nuñez</a>
+  <asunto>Preguntamos por la salud!</asunto>
+  <texto>
+    Hola Andrea,
+    ...
+    Adios, Andrea
+  </texto>
+</mensaje>
+----
+====
+
+=== Atributo Style
+El atributo style en CSS se utiliza para aplicar estilos directamente a un elemento. En lugar de definir reglas de estilo en un archivo de hoja de estilo externo (como un archivo .css), el atributo style permite especificar estilos en línea directamente en la etiqueta.
+
+[EXAMPLE]
+====
+[source, XML]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="ejemplo.css" type="text/css"?>
+<mensaje>
+  <de style="color:blue"; background-color="yellow">Jose Solana</de>
+  <a>Andrea Nuñez</a>
+  <asunto>Preguntamos por la salud!</asunto>
+  <texto>
+    Hola Andrea,
+    ...
+    Adios, Andrea
+  </texto>
+</mensaje>
+----
+====
+
+=== Herencia
+Los estilos se heredan de una etiqueta a otra. Los estilos aplicados a la etiqueta padre son heredados por la etiqueta hijo.
+
+[NOTE]
+====
+En caso de conflicto, prevalece el estilo aplicado a la etiqueta style al estilo definido en la hoja de estilos CSS
+====
+
+=== Comentarios
+
+Los comentarios siguen esta sintaxis:
+
+[source, css]
+----
+/*esto es un comentario*/
+----
+
+
+=== Propiedades CSS
+
+.Fuentes 
+|===
+2+| Fuentes
+
+| color
+| Define el color del texto dentro de un elemento. Puede ser especificado en notación hexadecimal, nombre de color o valor RGB.
+
+| font-size
+| Establece el tamaño de la fuente utilizada en el texto. Se puede expresar en píxeles, porcentaje u otras unidades de medida.
+
+| font-family
+| Indica la familia de fuentes que se aplicará al texto dentro del elemento. Puede contener múltiples fuentes separadas por comas.
+
+| font-weight
+| Define el peso de la fuente, como "normal", "bold", "bolder", "lighter" u otros valores numéricos.
+
+| font-style
+| Establece el estilo de la fuente, como "normal", "italic" o "oblique", que cambia la inclinación del texto.
+
+| text-shadow
+| Agrega sombra al texto, permitiendo controlar el color, el desplazamiento horizontal y vertical, y el desenfoque.
+
+| font-stretch
+| Especifica la expansión o compresión horizontal de la fuente, permitiendo valores como "normal", "condensed" y "expanded".
+
+|===
+
+.Párrafos
+|===
+2+| Párrafos
+
+| line-height
+| Establece la altura de línea, controlando el espacio entre las líneas de texto. Puede expresarse en píxeles, porcentaje u otras unidades.
+
+| text-decoration
+| Agrega decoración al texto, como subrayado, tachado o resaltado. Puede ser utilizado para enfatizar contenido.
+
+| text-align
+| Define la alineación horizontal del texto dentro de su contenedor. Puede ser "left", "center", "right" o "justify".
+
+| text-indent
+| Establece la sangría en la primera línea del texto. Puede ser en píxeles, porcentaje u otras unidades de medida.
+
+| text-transform
+| Cambia la capitalización del texto, convirtiéndolo en mayúsculas o minúsculas. Puede ser "uppercase", "lowercase" o "capitalize".
+
+| letter-spacing
+| Controla el espaciado entre caracteres en el texto. Puede ser positivo o negativo.
+
+| word-spacing
+| Ajusta el espacio entre palabras en el texto. Puede ser útil para mejorar la legibilidad.
+
+| vertical-align
+| Alinea verticalmente el contenido dentro de su contenedor. Puede ser "top", "middle", "bottom" u otros valores.
+
+|===
+
+
+
+.Propiedades del Cursor del Ratón
+|===
+2+| Cursor
+
+| auto
+| El navegador selecciona el cursor apropiado basado en el contexto.
+
+| crosshair
+| El cursor se convierte en una cruz, indicando la posibilidad de hacer clic.
+
+| default
+| El cursor es el predeterminado del navegador.
+
+| hand
+| El cursor se muestra como una mano, indicando un enlace o elemento interactivo.
+
+| move
+| El cursor se convierte en una flecha con cuatro direcciones, indicando la posibilidad de mover algo.
+
+| text
+| El cursor cambia a un indicador de texto, indicando que el usuario puede escribir o seleccionar texto.
+
+| wait
+| El cursor muestra un reloj en espera, indicando que el navegador está ocupado.
+
+| help
+| El cursor cambia a un ícono de ayuda, indicando que se proporcionará información adicional.
+
+| e-resize, ne-resize, nw-resize, n-resize, se-resize, sw-resize, s-resize y w-resize
+| Cada uno de estos valores cambia el cursor a una flecha bidireccional que indica la dirección de redimensionamiento en los bordes y esquinas de un elemento.
+|===
+
+
+.Propiedades de Fondo
+|===
+2+| Fondo
+
+| background-color
+| Define el color de fondo de un elemento. Puede ser especificado en notación hexadecimal, nombre de color o valor RGB.
+
+| background-image
+| Establece una imagen como fondo de un elemento. Puede ser una URL o un valor en formato degradado.
+
+| background-repeat
+| Controla cómo se repite la imagen de fondo. Puede ser "repeat", "repeat-x", "repeat-y" o "no-repeat".
+
+| background-position
+| Define la posición inicial de la imagen de fondo. Puede ser valores como "center", "left top" o coordenadas en píxeles.
+
+|===
+
+
+.Modelos de caja
+|===
+2+| Modelos de caja
+
+| margin-left, margin-right, margin-top, margin-bottom, margin
+| Estas propiedades controlan los márgenes alrededor de un elemento en las direcciones izquierda, derecha, arriba, abajo y general.
+
+| padding-left, padding-right, padding-top, padding-bottom, padding
+| Estas propiedades definen los rellenos dentro de un elemento en las direcciones izquierda, derecha, arriba, abajo y general.
+
+| border-color
+| Define el color del borde del elemento. Puede ser especificado en notación hexadecimal, nombre de color o valor RGB.
+
+| border-style
+| Establece el estilo del borde, como "solid", "dashed", "dotted" u otros valores.
+
+| border-width
+| Controla el ancho del borde. Puede ser un valor en píxeles, em, rem u otras unidades.
+
+|===
+
+.Propiedades de Tamaño
+|===
+2+| Tamaño
+
+| width
+| Define el ancho de un elemento. Puede ser un valor en píxeles, porcentaje u otras unidades.
+
+| min-width y max-width
+| Estas propiedades establecen el ancho mínimo y máximo que un elemento puede tener, respectivamente.
+
+| height
+| Establece la altura de un elemento. Puede ser un valor en píxeles, porcentaje u otras unidades.
+
+| min-height y max-height
+| Controlan la altura mínima y máxima que un elemento puede tener.
+
+| overflow
+| Define cómo se maneja el contenido que supera los límites de un elemento. Puede ser "visible", "hidden", "scroll" o "auto".
+
+|===
+
+==== Propiedades de posicionamiento
+
+.Display
+|===
+2+| Display
+
+| none
+| Oculta un elemento, eliminando su espacio en la disposición.
+
+| block
+| Convierte un elemento en un bloque, ocupando todo el ancho disponible y generando un salto de línea antes y después.
+
+| inline
+| Hace que un elemento sea inline, ocupando solo el espacio necesario y permitiendo otros elementos en la misma línea.
+
+| table
+| Convierte un elemento en un contenedor de tabla, similar a un <table> de HTML.
+
+| inline-table
+| Hace que un elemento sea inline pero actúe como una tabla.
+
+| table-row-group
+| Crea un grupo de filas en una tabla.
+
+| table-header-group
+| Crea un grupo de filas de encabezado en una tabla.
+
+| table-footer-group
+| Crea un grupo de filas de pie de página en una tabla.
+
+| table-row
+| Define una fila en una tabla.
+
+| table-column-group
+| Crea un grupo de columnas en una tabla.
+
+| table-column
+| Define una columna en una tabla.
+
+| table-cell
+| Crea una celda en una tabla.
+
+| table-caption
+| Define el título de una tabla.
+
+|===
+
+==== Float y clear
+
+.float y clear
+|===
+| Propiedad CSS y Explicación
+
+| float
+| La propiedad float permite que un elemento flote a la izquierda o derecha de su contenedor, permitiendo que otros elementos fluyan alrededor de él.
+
+| clear
+| La propiedad clear controla cómo los elementos se colocan en relación con los elementos flotantes. Puede ser "left", "right", "both" o "none".
+
+|===
+
+

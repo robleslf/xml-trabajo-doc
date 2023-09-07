@@ -1,0 +1,225 @@
+== Otros lenguajes a utilizar con documentos XML
+
+===XML Base
+Se utiliza en otras tecnologías y más concretamente a la hora de seleccionar los enlaces (en especial con XLink), de forma que con este mecanismo cada elemento puede resolver sus respectivas URI relativas a través de los valores que tom,an sus atribtuos.
+
+El Lenguaje de Vinculación XML [XLink] define construcciones del Lenguaje de Marcado Extensible (XML) 1.0 [XML] para describir enlaces entre recursos. Uno de los requisitos declarados en XLink es el de admitir las construcciones de vinculación de HTML [HTML 4.01] de manera genérica. El elemento BASE de HTML es una de esas construcciones que el Grupo de Trabajo XLink ha considerado. BASE permite a los autores especificar explícitamente la URI base de un documento con el propósito de resolver URIs relativas en enlaces a imágenes externas, applets, programas de procesamiento de formularios, hojas de estilo, y así sucesivamente.
+
+Este documento describe un mecanismo para proporcionar servicios de URI base a XLink, pero como una especificación modular, de modo que otras aplicaciones XML que se beneficien de un control adicional sobre URIs relativas, pero que no estén construidas sobre XLink, también puedan hacer uso de él. La sintaxis consiste en un único atributo XML llamado *xml:base*.
+
+
+=== Elemento xml:base
+El elemento xml:base se utiliza en documentos XML para especificar una URI base que actúa como punto de partida para resolver las URI relativas dentro del documento. Permite que los recursos vinculados dentro del documento se resuelvan correctamente y de manera consistente.
+
+=== Sintaxis de xml:base
+El elemento xml:base se agrega como un atributo a elementos específicos dentro del documento XML. La sintaxis es simple: `xml:base="URI"`, donde "URI" es la URI base que se utiliza como punto de partida para las URI relativas.
+
+=== Uso de xml:base en XML
+El elemento xml:base se utiliza en documentos XML para establecer un contexto de resolución de URI para enlaces relativos, como enlaces a recursos externos, imágenes, hojas de estilo y otros recursos relacionados.
+
+=== Compatibilidad y Aplicaciones
+XML Base se utiliza en una variedad de aplicaciones y se ha adoptado en varias especificaciones XML. Asegura la coherencia en la resolución de enlaces relativos en documentos XML y es compatible con muchas tecnologías XML relacionadas.
+
+=== xml:base="URI"
+El atributo xml:base puede ser insertado en documentos XML para especificar un URI base de otro URI base del documento o de la entidad externa. El valor de este atributo es interpretado como un URI Referencia como está definido en RFC 2396 [IETF RFC 2396], despues de ser procesado de acuerdo a la Sección 3.1.
+
+Dentro de procesadores XML capaces de interpretar los Espacios de Nombres (namespace), el prefijo "xml" está dedicado al Espacio del Nombre (namespace) http://www.w3.org/XML/1998/namespace tal como se ha descrito en el documento de Espacio de Nombres (namespace) en XML [XML Names]. Note que xml:base pueden ser todavía usados por los procesadores XML, que no comprenden los Espacios de Nombres (namespace).
+
+Un ejemplo de xml:base en un documento simple conteniendo XLinks seguidos. XLink normativamente hace referencia a XML Base para interpretación de URI relativos referenciados en xlink:href atributos.
+
+[source, xml]
+---
+<?xml version="1.0"?>
+<doc xml:base="http://example.org/today/"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+  <head>
+    <title>Virtual Library</title>
+  </head>
+  <body>
+    <paragraph>See <link xlink:type="simple" xlink:href="new.xml">what's
+      new</link>!</paragraph>
+    <paragraph>Check out the hot picks of the day!</paragraph>
+    <olist xml:base="/hotpicks/">
+      <item>
+        <link xlink:type="simple" xlink:href="pick1.xml">Hot Pick #1</link>
+      </item>
+      <item>
+        <link xlink:type="simple" xlink:href="pick2.xml">Hot Pick #2</link>
+      </item>
+      <item>
+        <link xlink:type="simple" xlink:href="pick3.xml">Hot Pick #3</link>
+      </item>
+    </olist>
+  </body>
+</doc>
+---
+
+Los URIs en este ejemplo son transformados en URIs completos como se indica:
+
+* "what's new" lleva al URI "http://example.org/today/new.xml"
+
+* "Hot Pick #1" lleva al URI "http://example.org/hotpicks/pick1.xml"
+
+* "Hot Pick #2" lleva al URI "http://example.org/hotpicks/pick2.xml"
+
+* "Hot Pick #3" lleva al URI "http://example.org/hotpicks/pick3.xml"
+
+
+
+XML Base es una especificación que se utiliza para proporcionar una base o URI (Identificador Uniforme de Recursos) de referencia para los enlaces relativos dentro de un documento XML.
+
+
+== XInclude
+
+=== Introducción a XInclude
+XInclude, cuyo nombre completo es "XML Inclusions" (Inclusiones XML), es una especificación del World Wide Web Consortium (W3C) diseñada para abordar la necesidad de incluir y combinar fragmentos de documentos XML en otros documentos XML. Esta especificación permite la modularización y reutilización de contenido XML de manera eficiente, lo que es especialmente valioso en contextos donde se manejan documentos XML complejos y extensos.
+
+=== Sintaxis de XInclude
+La sintaxis principal de XInclude se basa en un conjunto de elementos específicos, siendo el más importante xi:include. Este elemento se utiliza para indicar las ubicaciones de los fragmentos de inclusión y proporciona opciones de procesamiento que controlan cómo se deben incorporar los fragmentos en el documento principal.
+
+Un ejemplo simple de la sintaxis de XInclude se vería así:
+
+[source, xml]
+---
+<xi:include href="fragmento.xml"/>
+---
+En este ejemplo, <xi:include> se utiliza para incluir el contenido del archivo "fragmento.xml" dentro del documento XML actual en el lugar donde se encuentra el elemento.
+
+=== Beneficios de XInclude
+XInclude ofrece varios beneficios importantes:
+
+Modularidad y Reutilización: Permite dividir documentos XML en fragmentos independientes, lo que facilita la gestión y la reutilización de contenido compartido en múltiples ubicaciones.
+
+Mantenimiento Eficiente: Cuando se actualiza un fragmento incluido, esos cambios se reflejan automáticamente en todos los lugares donde se haya incluido ese fragmento, lo que reduce la redundancia y facilita el mantenimiento.
+
+Consistencia: Promueve la consistencia en documentos compuestos, ya que los fragmentos incluidos garantizan que los mismos elementos y datos se utilicen en todas partes donde se incluyan.
+
+Separación de Responsabilidades: Facilita la colaboración en equipos donde diferentes partes de un documento XML son mantenidas por diferentes equipos o individuos.
+
+Reducción de Errores: Al evitar la duplicación de contenido, se reducen las posibilidades de errores humanos al actualizar o modificar los datos compartidos.
+
+=== Compatibilidad y Aplicaciones
+XInclude es compatible con una variedad de aplicaciones XML, incluyendo la creación de documentos XML modulares, la inclusión de fragmentos de contenido en documentos compuestos, la generación de documentos personalizados y la simplificación de la gestión de contenido compartido en entornos XML.
+
+En resumen, XInclude es una herramienta valiosa para mejorar la modularidad, la reutilización y la consistencia en documentos XML, lo que lo convierte en una especificación importante en el mundo de la representación y el intercambio de datos en formato XML.
+
+== XML Information Set
+
+=== Children (Hijos)
+* El elemento "Children" contiene una lista ordenada de todos los hijos de un elemento. Sus propiedades incluyen:
+** Propósito: Contiene una secuencia de nodos, que pueden ser elementos, atributos, comentarios, caracteres o instrucciones de procesamiento.
+
+=== Document Element (Elemento de Documento)
+* El "Document Element" es el elemento raíz del documento XML. Sus propiedades incluyen:
+** Propósito: Es el elemento raíz del documento XML.
+** Propiedades: Es un único elemento que encapsula todo el contenido del documento.
+
+=== Notations (Notaciones)
+* Las "Notations" definen notaciones que pueden ser utilizadas en el documento. Sus propiedades incluyen:
+** Propósito: Define notaciones que pueden ser utilizadas en el documento.
+** Propiedades: Contiene información sobre notaciones definidas en el documento.
+
+=== Unparsed Entities (Entidades no analizadas)
+* Las "Unparsed Entities" definen entidades no analizadas en el documento. Sus propiedades incluyen:
+** Propósito: Define entidades no analizadas en el documento.
+** Propiedades: Contiene información sobre las entidades no analizadas, incluyendo su nombre y detalles relacionados.
+
+=== Base URI (URI Base)
+* El "Base URI" proporciona el URI base del documento XML. Sus propiedades incluyen:
+** Propósito: Proporciona el URI base del documento XML.
+** Propiedades: Es un URI que sirve como base para resolver URI relativos dentro del documento.
+
+=== Character Encoding Scheme (Esquema de Codificación de Caracteres)
+* El "Character Encoding Scheme" indica la codificación de caracteres utilizada en el documento. Sus propiedades incluyen:
+** Propósito: Indica la codificación de caracteres utilizada en el documento.
+** Propiedades: Especifica la codificación de caracteres como UTF-8, UTF-16, etc.
+
+=== Standalone
+* El "Standalone" indica si el documento XML se encuentra en modo independiente. Sus propiedades incluyen:
+** Propósito: Indica si el documento XML se encuentra en modo independiente.
+** Propiedades: Puede ser "yes" (sí) o "no" (no) para indicar si el documento es independiente de otros recursos.
+
+=== Version (Versión)
+* La "Version" especifica la versión de XML utilizada en el documento. Sus propiedades incluyen:
+** Propósito: Especifica la versión de XML utilizada en el documento.
+** Propiedades: Indica la versión del estándar XML utilizada, como "1.0" o "1.1".
+
+=== All Declarations Processed (Todas las Declaraciones Procesadas)
+* El "All Declarations Processed" indica si todas las declaraciones XML en el documento han sido procesadas. Sus propiedades incluyen:
+** Propósito: Indica si todas las declaraciones XML en el documento han sido procesadas.
+** Propiedades: Puede ser "yes" (sí) o "no" (no) para indicar si todas las declaraciones se han procesado.
+
+==== Item de Información del Elemento
+* Las propiedades del "Item de Información del Elemento" incluyen:
+** Namespace Name (Nombre del Espacio de Nombres): El URI del espacio de nombres del elemento.
+** Local Name (Nombre Local): El nombre local del elemento.
+** Prefix (Prefijo): El prefijo del espacio de nombres del elemento.
+** Attributes (Atributos): Lista de atributos del elemento.
+** Namespaces Attributes (Atributos de Espacios de Nombres): Lista de atributos de espacio de nombres asociados al elemento.
+** In-Scope Namespaces (Espacios de Nombres en Alcance): Lista de espacios de nombres en alcance para el elemento.
+** Parent (Padre): El elemento padre del elemento.
+
+==== Item de Información del Atributo
+* Las propiedades del "Item de Información del Atributo" incluyen:
+** Namespace Name (Nombre del Espacio de Nombres): El URI del espacio de nombres del atributo.
+** Local Name (Nombre Local): El nombre local del atributo.
+** Prefix (Prefijo): El prefijo del espacio de nombres del atributo.
+** Normalized Value (Valor Normalizado): El valor del atributo después de ser procesado.
+** Specified (Especificado): Indica si el atributo está especificado en el documento XML.
+** Attribute Type (Tipo de Atributo): Tipo de datos del atributo (por ejemplo, CDATA, ID, etc.).
+** References (Referencias): Indica si el atributo contiene referencias a entidades.
+** Owner Element (Elemento Propietario): El elemento al que pertenece el atributo.
+
+==== Item de Información de Instrucción de Procesamiento
+* Las propiedades del "Item de Información de Instrucción de Procesamiento" incluyen:
+** Target (Objetivo): El objetivo de la instrucción de procesamiento (por ejemplo, "xml").
+** Content (Contenido): El contenido de la instrucción de procesamiento.
+** Base URI (URI Base): El URI base de la instrucción de procesamiento.
+** Notation (Notación): La notación asociada a la instrucción de procesamiento.
+** Parent (Padre): El elemento padre de la instrucción de procesamiento.
+
+==== Item de Información de Referencia a Entidad No Expandida
+* Las propiedades del "Item de Información de Referencia a Entidad No Expandida" incluyen:
+** Name (Nombre): El nombre de la entidad no expandida.
+** System Identifier (Identificador del Sistema): El identificador del sistema de la entidad.
+** Public Identifier (Identificador Público): El identificador público de la entidad.
+** Declaration Base URI (URI Base de Declaración): El URI base de la declaración de la entidad.
+** Parent (Padre): El elemento padre de la referencia a entidad no expandida.
+
+==== Item de Información de Carácter
+* Las propiedades del "Item de Información de Carácter" incluyen:
+** Character Code (Código de Carácter): El valor numérico del carácter.
+** Element Content Whitespace (Espacios en Blanco en el Contenido del Elemento): Indica si el carácter es espacio en blanco dentro del contenido del elemento.
+** Parent (Padre): El elemento padre del carácter.
+
+==== Item de Información de Comentario
+* Las propiedades del "Item de Información de Comentario" incluyen:
+** Content (Contenido): El contenido del comentario.
+** Parent (Padre): El elemento padre del comentario.
+
+==== Item de Información de Declaración de Tipo de Documento
+* Las propiedades del "Item de Información de Declaración de Tipo de Documento" incluyen:
+** System Identifier (Identificador del Sistema): El identificador del sistema asociado a la declaración de tipo de documento.
+** Public Identifier (Identificador Público): El identificador público asociado a la declaración de tipo de documento.
+** Children (Hijos): Lista de nodos hijos de la declaración de tipo de documento.
+** Parent (Padre): El elemento padre de la declaración de tipo de documento.
+
+==== Item de Información de Entidad No Analizada
+* Las propiedades del "Item de Información de Entidad No Analizada" incluyen:
+** Name (Nombre): El nombre de la entidad no analizada.
+** System Identifier (Identificador del Sistema): El identificador del sistema de la entidad.
+** Declaration Base URI (URI Base de Declaración): El URI base de la declaración de la entidad.
+** Notation Name (Nombre de Notación): El nombre de la notación asociada a la entidad.
+** Notation (Notación): La notación asociada a la entidad.
+
+==== Item de Información de Notación
+* Las propiedades del "Item de Información de Notación" incluyen:
+** Name (Nombre): El nombre de la notación.
+** System Identifier (Identificador del Sistema): El identificador del sistema de la notación.
+** Public Identifier (Identificador Público): El identificador público de la notación.
+** Declaration Base URI (URI Base de Declaración): El URI base de la declaración de la notación.
+
+==== Item de Información de Espacio de Nombres
+* Las propiedades del "Item de Información de Espacio de Nombres" incluyen:
+** Prefix (Prefijo): El prefijo del espacio de nombres.
+** Namespace Name (Nombre del Espacio de Nombres): El URI del espacio de nombres.

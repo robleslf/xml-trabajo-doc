@@ -1,0 +1,958 @@
+== Esquemas XML
+
+=== Organización del documento
+
+Un esquema define la "apariencia" de uno o más documentos XML; esto es, qué elementos y atributos pueden contener, en qué orden deben estar, y cuál puede ser su contenido.
+
+==== La etiqueta schema 
+La etiqueta schema identifica la raíz de un documento esquema XML. En esta etiqueta se declara el espacio de nombres estándar que utilizan los esquemas (y que permite diferenciar las etiquetas XML del esquema, respecto a las del documento XML), el cual se puede definir como el espacio de nombres por defecto, definir un prefijo *xs* para él (es la forma habitual) o bien definir un prefijo *xsd*. Es decir, estas tres posibilidades:
+
+[source, xsd]
+----
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+----
+
+- *xmlns* declara los espacios de nombres sobre los que se aplica el esquema (ver _Definir un espacio de nombres_)
+- *targetNamespace* indica el espacio de nombre sobre los que se aplica el esquema
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+
+xmlns:doc="http://www.midominio.net/doc"
+
+xmlns:img="http://www.midominio.net/img"
+
+targetNamespace="http://www.midominio.net/doc "http://www.midominio.net/img">
+----
+====
+
+
+==== Asociar un esquema a un documento XML
+
+1. Insertar cabecera
+2. Etiqueta raíz de inicio con:
+- Espacio de nombre que corresponde al documento XML
+- Espacio de nombre de XML Schema añadiéndole *-instance*
+- xs:schemaLocation = es un par formado por el espacio de nombres que será validado por el esquema y por la ruta al documento XMLSchema (con extensión xsd). Se suele utilizar el prefijo *xs*, aunque se pueden usar otros. 
+3. ...
+4. Etiqueta raíz de fin.
+
+
+.Validación mediante esquemas XML
+[options="header", width=100%, cols=2*^, cols = "1,1"]
+|====
+|XSD|XML
+|<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+
+xmlns:doc="http://www.midominio.net/doc"
+
+xmlns:img="http://www.midominio.net/img"
+
+targetNamespace="http://www.midominio.net/doc "http://www.midominio.net/img"> 
+
+...
+
+</xs:schema>
+| <?xml version="1.0" encoding="UTF-8"?>
+
+<documento xmlns="http://www.midominio.net/doc"
+
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+xsi:schemaLocation="http://www.midominio.net/doc prueba.xsd"> 
+
+...
+
+</documento>
+|====
+
+==== Partes de un esquema
+
+.Partes de esquema XML
+[options="header", width=100%, cols=2*^, cols = "1,4"]
+|====
+2+|Esquema XML
+|Definición:|Empieza con la etiqueta <?xml version="1.0" encoding="UTF-8"?> y después la descripción del esquema con la etiqueta <xs:schema> 
+|Elementos|Para indicar los elementos permitidos en los documentos que sigan el esquema.
+
+Se definen con la etiqueta <xs:element>
+|Atributos:|Para indicar los atributos permitidos en cada elemento permitido en los documentos que sigan el esquema.
+
+Se definen con la etiqueta <xs:attribute>.
+|Tipos simples:|Permiten definir los tipos simples de datos que podrá utilizar el documento XML. 
+
+Se definen con la etiqueta <xs:simpleType>.
+|Tipos complejos:|Permiten definir los tipos complejos de datos que podrá utilizar el documento XML.
+
+Se definen con la etiqueta <xs:complexType>.
+|Documentación:|información utilizable por aplicaciones que manejen los esquemas.
+
+Se definen con las etiquetas <xs:annotation>, <xs:documentation> y <xs:appInfo>
+|====
+
+
+==== Componentes globales y locales
+
+*Ámbito global*. Se trata de los elementos del esquema que se coloquen dentro de la etiqueta raíz schema y que no están dentro de ninguna otra. Estos elementos se pueden utilizar en cualquier parte del esquema.
+
+*Ámbito local*. Se trata de elementos definidos dentro de otros elementos. En ese caso se pueden utilizar sólo dentro del elemento en el que están inmersos y no en todo el documento. Es decir si, por ejemplo, si dentro de la definición de un atributo colocamos la definición de un tipo de datos, este tipo de datos sólo se puede utilizar dentro del elemento xs:attribute en el que se encuentra la definición del tipo de datos.
+
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xs:schema xmlns:xs=”http://www.w3.org/2001/XMLSchema”
+           xmlns:doc=”http://www.jorgesanchez.net/doc”
+        targetNamespace=”http://www.jorgesanchez.net/doc”> 
+<xs:element …>  <!--Definición global -->
+  <xs:simpleType …> <!--Definición local -->
+	…
+  </xs:simpleType>
+…
+</xs:element >
+<xs:simpleType …> <!--Definición global -->
+	…
+</xs:simpleType …>
+</xs:schema>
+----
+====
+
+
+=== Anotaciones
+
+*<xsd:annotation>*
+
+Representa un elemento opcional empleado para incluir comentarios generales sobre un Schema.
+
+Dentro de este elemento pueden estar <xsd:appInfo> y <xsd:documentation>
+
+*<xsd:appinfo atributos >*
+
+Empleado para definir comentarios en forma de texto acerca de la aplicación que utilizará el Schema. El atributo puede ser:
+
+====
+*source: URI*   Define una ubicación alterna que contiene la información.
+====
+
+*<xsd:documentation atributos>*
+
+Empleado para definir comentarios en forma de texto para el Schema. El atrib puede ser:
+
+====
+*source: URI*   Define una ubicación alterna que contiene información.
+
+*xml:lang: valor* Declara el idioma en la que está definido el comentario (valor).
+====
+
+
+*xsd:documentation*
+Para añadir documentación a nuestro Esquema XML y hacerlo más legible y descifrable.
+La información proporcionada no se utiliza en la validación.
+
+[source, xsd]
+----
+<xsd:annotation>
+  <xsd: applnfo >
+    Escribimos las anotaciones en si.
+  </xsd: appInfo >
+  <xsd:documentation>
+    Escribimos las anotaciones en si.
+  </xsd:documentation>
+</xsd:annotation>
+----
+
+=== Declaraciones de elementos 
+En XML Schema la definición de un elemento XML se realiza mediante la etiqueta element. sintaxis:
+
+
+[source, xsd]
+----
+<xs:element
+	name=”nombre del elemento”
+	type=”tipo global de datos”
+	minOccurs=”número mínimo de veces”
+	maxOccurs=”máximo número de veces”
+	fixed=”valor fijo”
+	default=”valor por defecto”
+>
+----
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xs:schema xmlns:xs=”http://www.w3.org/2001/XMLSchema”> 
+    <xs:element name=”descripción” type=”xs:string” /> 
+</xs:schema>
+----
+====
+
+* *name:* es el nombre del elemento
+
+* *type*: el tipo de elemento. XML Schema define dos tipos de elementos:
+
+** *Tipos simples*: son elementos que sólo pueden contener datos carácter pueden incluir otros elementos ni tampoco atributos. 
+
+** *Tipos complejos*: estos elementos pueden incluir otros elementos y/o atributos. Pueden contener los siguientes elementos:
+
+*** *<xsd:sequence>* indica una secuencia de elementos que tienen que aparecer en el documento XML. Deben aparecer todos, y en el mismo orden en que se especifican.
+
+*** *</xs:any>* indica que puede haber cualquier tipo de elemento del grupo del elemento declarado
+
+*** *</xs:anyAttribute>* indica la presencia de cualquier atributo dentro de un elemento
+
+*** *</xs:choice>* se especifica una lista de elementos alternativos para incluirse en determinado elemento
+
+* *minOccurs* y *maxOccurs* (Opcionales): estos dos atributos indican el mínimo (m- nOccurs) y máximo (maxOccurs) número de ocurrencias del elemento. El valor por defecto para ambos atributos es 1. Si se quiere indicar que el elemento puede aparecer un número ilimitado de veces, el atributo maxOccurs tomará el valor "unbounded"
+
+* *fixed* (Opcional): especifica un valor fijo para el elemento. 
+
+* *default* (Opcional): especifica un valor por defecto para el elemento.
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="producto">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="nombre" type="xs:string"/>
+        <xs:element name="descripcion" type="xs:string"/>
+        <xs:choice>
+          <xs:element name="precio" type="xs:decimal"/>
+          <xs:element name="descuento" type="xs:decimal"/>
+        </xs:choice>
+        <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+      </xs:sequence>
+        <xs:attribute name="codigo" type="xs:int" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
+----
+====
+
+
+==== Declaraciones globales de los elementos
+
+
+El atributo ref hace referencia a un atributo global, que puede estar definida en otro fichero xsd, al que se referencia mediante un espacio de nombres.
+Se les debe llamar o hacer referencia en el orden en que aparecen en el documento XML.
+
+La sintaxis de una declaración local que hace referencia a un elemento global:
+
+[source, xsd]
+----
+<xsd:element ref = "etiqueta" cardinalidad/> 
+----
+
+* *etiqueta:* es el nombre del elemento declarado globalmente.
+
+* *cardinalidad:* especifica cuántas veces puede aparecer el elemento en ese puntoPara ello de utilizan los atributos _minOccurs_ y _maxOccurs_. Estos atributos son opcionales:
+
+[source, xsd]
+----
+<xsd:element ref="etiqueta" minOccurs="valor" maxOccurs="valor" />
+----
+
+Esta definición deberá aparecer en cada secuencia, conjunto de opciones, grupo desordenado o definición con nombre en la que aparezca el elemento.
+
+Se necesita el elemento *<xsd:import>* dentro del esquema.  
+Sintaxis:
+
+[source, xsd]
+----
+<xsd:import namespace = "espacio_al_que_hace_referencia" schemaLocation = "ruta_del_documento">
+----
+
+==== Declaración de un elemento basado en un tipo complejo
+Para declarar un elemento de tipo complejo utilizamos la sintaxis:
+
+<xsd:element name="nombre" type="etiqueta">
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="persona">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="nombre" type="xsd:string"/> 
+        <xsd:element name="apellidos" type="xsd:string"/> 
+        <xsd:element name="edad" type="xsd:integer"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Pedro" type="persona"/>
+</xsd:schema>
+----
+====
+
+==== Elementos con tipos complejos anónimos
+Si no se quiere reutilizar un tipo complejo, puede ser más fácil crear un tipo complejo anónimo en la declaración del elemento, utilizando la siguiente sintaxis:
+
+[source, xsd]
+----
+<xsd:element name="etiqueta">
+----
+
+- *etiqueta* es el nombre del elemento que se declara.
+
+
+=== Declaraciones de atributos
+La sintaxis es:
+
+[source,xsd]
+----
+<xs:attribute
+	  name=”nombre del elemento”
+	  type=”tipo simple"
+	  use="valor" <!-- prohibited, optional o required -->
+    default=”valor por defecto”
+	  fixed=”valor fijo”
+/>
+----
+
+
+- *name:* es el nombre del atributo.
+
+- *type:* el tipo del atributo. Los atributos sólo pueden contener tipos simples.
+
+- *use* (Opcional): puede tomar uno de los siguientes valores:
+
+* *required:* el atributo debe aparecer en el documento XML.
+
+* *optional:* el atributo puede aparecer o no aparecer en el documento XML. Es es el valor por defecto.
+
+* *prohibited:* el atributo no debe aparecer en el documento XML.
+
+- *default* (Opcional): si el atributo no aparece en el documento XML, se le asigna el valor especificado en el atributo "default". Los valores por defecto sólo tienen sentido si el atributo es opcional, de lo contrario tendremos un error.
+
+- *fixed* (Opcional): define un valor fijo para el atributo.
+
+* Si el valor del atributo está presente en la instancia del documento XML, el valor debe ser el mismo que el que indica el atributo "fixed".
+
+* Si el atributo no está presente en el documento XML, se le asigna el valor contenido en el atributo "fixed".
+
+Los valores de los atributos *"default"* y *"fixed"* son excluyentes, por lo tanto habrá un error si una declaración contiene ambos
+
+[NOTE]
+====
+Solo los elementos de tipo compuesto pueden contener atributos
+====
+
+Las declaraciones de atributos para un elemento deben aparecer siempre al final del bloque delimitado por la etiqueta de inicio *<xsd:complexType>* y la de fin *</xsd:complexType>*, después de las especificaciones de todos los demás com- ponentes. Es decir, los elementos *<xsd:attribute>* deben venir después del grupo *<xsd:sequence>*, *<xsd:choice>* o *<xsd:all>* que forma el cuerpo de un elemento.
+
+Para añadir atributos a elementos que contienen sólo texto, se genera un nue vo tipo complejo a partir de uno simple, dándole al elemento *<xsd:complexType>* un elemento hijo *<xsd:simpleContent>* en vez de un elemento *<xsd:sequence>*, *<xsd:choice>* o *<xsd:all>*.
+
+El elemento *<xsd:simpleContent>* tiene un elemento hijo *<xsd:extensión>*, cuyo atributo base identifica el tipo simple a extender (como xsd:string). Los atributos *<xsd:attribute>* se sitúan dentro del elemento *<xsd:extension>*.
+
+*<xsd:extension>* permite añadir atributos a los tipos simples por extensión
+
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<xsd:element name = "elementobase">
+  <xsd:complexType>
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="atributobase" default="22"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+</xsd:element>
+----
+====
+
+En este ejemplo definimos el elemento "elementobase" de tipo complejo, pero al usar el elemento *<xsd:simpleContent>* estamos diciendo que el contenido de "elementobase" tiene que ser sólo datos texto. Sin embargo, este elemento sí tiene un atributo.
+
+Esto se especifica definiendo el elemento *"xsd:simpleContent"* como una extensión del tipo base *"xsd:string"* a la que se le añade el atributo "atributobase", cuyo valor por defecto es "22". También es posible definir tipos derivados de los tipos complejos definidos por el usuario, utilizando estos mismos mecanismos.
+
+
+
+
+=== Definición de tipos simples
+==== Tipos string
+
+- *xsd:string:* secuencia de longitud finita de caracteres.
+
+- *xsd:normalizedString:* Una cadena que no contiene tabuladores, ni retornos de carro, ni saltos de línea.
+
+- *xsd:token:* Una cadena sin espacios en blanco iniciales ni finales, sin tabuladores, sin saltos de línea, y sin más de un espacio en blanco consecutivo.
+
+- *xsd:anyURI:* una uri estándar de Internet
+
+- *xsd:NOTATION:* declara enlaces a contenido externo no-XML.
+
+- *xsd:language:* Nombres válidos de idiomas según xml_lang (en, en-GBen-US, fr, spetc)
+
+- *xsd:Name:* Un nombre XML, que puede contener ":" (pero no se le da a este carácter ningún significado) Se puede usar como un nombre de tipo de elemento o nombre de atributo. El tipo de caracteres que permite coincide con NMTOKEN.
+
+- *xsd:QName:* Un nombre con prefijo.
+
+- *xsd:NCName:* Un nombre sin ningún carácter ":"
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:attribute name="pareja" type="xsd:QName"/>
+
+<sitio direccion="Juan:Juana" />
+----
+====
+
+==== Tipos numéricos
+
+- *xsd:decimal:* Un elemento con tipo simple decimal puede ser cualquier número positivo o negativo.
+
+- *xsd:float:* número de punto flotante de 32 bits de precisión simple.
+
+- *xsd:double:* número de punto flotante de 64 bits de doble precisión.
+
+- *xds:integer:* cualquier número positivo negativo sin decimales.
+
+- *xsd:positiveInteger:* Entero estrictamente mayor que cero
+
+- *xsd:unsignedLong:* Entero sin signo de ocho bytes 
+
+- *xsd:nonNegativeInteger:* Entero mayor o igual que cero
+
+- *xsd:byte:* Entero de 1 byte en complemento a dos
+
+- *xsd:unsignedInt:* Entero sin signo de cuatro bytes
+
+- *xsd:unsignedShort:* Entero sin signo de dos bytes
+
+- *xsd:unsignedByte:* Entero sin signo de un byte
+
+- *xsd:short:* Entero de 2 bytes en complemento a dos
+
+- *xsd:int:* Entero de 4 bytes en complemento a dos
+
+- *xsd:long:* Entero de 8 bytes en complemento a dos
+
+- *xsd:negativelntegerEntero* estrictamente menor que cero
+
+- *xsd:nonPositivelnteger:* Entero menor o igual que cero
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:element name="distancia" type="xsd:double"/>
+
+<distancia>7.8765</distancia>
+----
+====
+
+==== Tipos binario codificado
+
+- *xsd:boolean:* toma los valores "true" o "false".
+
+- *xsd:hexBinary:* Codifica cada byte de la entrada como dos dígitos hexadecimales (usa sólo los dígitos 0-9 y las letras A-F).
+
+- *xsd:base64Binary:* datos binarios codificados en base 64.
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:attribute name="direcciondememoria" type="xsd:hexBinary"/>
+
+<variable direcciondememoria ="AEF43">aux</variable>
+----
+====
+
+==== Tipos de fecha/hora
+
+- *xsd:duration:* duración de tiempo.
+
+- *xsd:dateTime:* instante de tiempo específico, usando calendario gregoriano, en formato "YYYYMM-DDThh:mm:ss".
+
+- *xsd:date:* fecha específica del calendario gregoriano, en formato "YYYY-MM-DD"
+
+- *xsd:time:* una hora determinada, en formato "hh:mm:ss"
+
+- *xsd:gYearMonth:* un año y mes del calendario gregoriano.
+
+- *xsd:gYear:* año del calendario gregoriano.
+
+- *xsd:gMonthDay:* día y mes del calendario gregoriano.
+
+- *xsd:gMonth:* un mes del calendario gregoriano.
+
+- *xsd:gDay:* una fecha del calendario gregoriano (día).
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:element name="cronometro" type="xsd:dateTime"/>
+
+<cronometro>2004-02-24T11:27:00</cronometro>
+----
+====
+
+
+==== Valores para atributos
+
+Hay unos tipos simples, que se aplican exclusivamente a los *atributos*. Estos son:
+
+- *xsd:NMTOKENS:* Atributo Cadena de caracteres. Mismos caracteres que NMTOKEN más espacio en blanco.
+
+- *xsd:NMTOKEN:* Atributo Cadena de caracteres. Sólo puede contener letras, dígitos, punto [.], guión [ - ], subrayado [_] y dos puntos [:]
+
+- *xsd:NOTATION:* definición de una notación para describir el formato de datos no XML dentro de un documento XML (ej: GIF, jpeg, pdf, etc.)
+
+- *xsd:ENTITY:* Atributo con una entidad no procesable. Permiten incluir contenido no-XML en un documento XML.
+
+- *xsd:ENTITIES:* Lista de nombres tipo ENTITY separados por comas.
+
+- *xsd:ID:* atributo que es único entre los atributos de tipo ID y elementos
+
+- *xsd:IDREF:* Cualquier nombre XML que se usa como valor de un atributo o elemento de tipo ID situado en cualquier otro lugar del documento
+
+- *xsd:IDREFS:* Tipo atributo. Lista de nombres separados por comas que se usan como valores de un atributo o elemento de tipo ID situado en cualquier otro lugar del documento.
+
+
+==== Tipos simples personalizados
+
+===== Limitación de valores numéricos
+
+- *maxInclusive:* Máximo valor que puede tomar el número; por ejemplo, si maxinclusive vale 6, el número tiene que ser menor o igual que 6.
+
+- *maxExclusive:* El número debe ser menor que este valor; por ejemplo, si maxExclusive vale 6, el número debe ser menor que 6.
+
+- *minInclusive:* Minimo valor que puede tomar el número; por ejemplo, si mininclusive vale 6, el número tiene que ser mayor o igual que 6.
+
+- *minExclusive:* El número debe ser mayor que este valor; por ejemplo, si minExclusive vale 6 el número debe ser mayor que 6.
+
+- *totalDigits:* Número total de dígitos en el número, incluyendo los enteros y los decimales
+
+- *fractionDigits:* Número de cifras decimales.
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:element name="anno">
+  <xsd:simpleType>
+    <xsd:restriction base="xsd:integer">
+      <xsd:maxInclusive value="1900" />
+      <xsd:minInclusive value="2100" />
+    </xsd:restriction>
+  </xsd:simpleType>
+<xsd:element>
+----
+====
+
+Para forzar la precisión de los valores en los números podríamos usar:
+
+* *<xsd:precision>* establece el límite superior a la cantidad total de dígitos que puede tener un número.
+
+* *<xsd:scale>* establece el máximo número de dígitos a la derecha del punto decimal
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:element name="precio">
+  <xsd:simpleType>
+    <xsd:restriction base="xsd:decimal">
+      <xsd:precision value="6" />
+      <xsd:scale value="2"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+</xsd:element>
+
+<!-- Documento XML válido
+
+<precio>123.6</precio>
+<precio>326</precio>
+
+Documento XML no válido
+
+<precio>7.876</precio>
+<precio>.876</precio> -->
+----
+====
+
+
+===== Limitación de la longitud de los strings
+
+- *length:* Número de caracteres de un valor de tipo string. Para listas se refiere al número de elementos en la lista. Para valores binarios se refiere al número de octetos. No se puede aplicar a los tipos "integer", "float" o "double".
+
+- *minLength y maxLength:* Valor mínimo y máximo respectivamente para la faceta "length".
+
+- *pattern:* Formato que debe tener el valor, especificado mediante una *expresión regular* tradicional.
+
+- *whiteSpace:* Controla la forma que tendrá el contenido de este dato una vez haya sido procesado; puede tomar los siguientes valores:
+
+* *"preserve":* Los datos no se modifican, quedan tal y como aparecen escritos.
+
+* *"replace":* Los tabuladores, saltos de línea y retornos de carro son sustituidos por espacios.
+
+* *"collapse":* Hace lo mismo que "replace", pero además sustituyen los espacios múltiples contiguos por un solo espacio.
+
+- *<xsd:enumeration>:* Permite crear un tipo de enumerado. Conjunto de posibles valores que puede tomar el dato.
+
+==== Creación de listas
+
+Los tipos simples vistos hasta ahora contienen solo un item por elemento, es decir un único número, fecha o cadena. Si necesitamos que el elemento contenga una lista de items separados por un espacio en blanco, XML Schema tiene el tipo *<xsd:list>* para hacerlo.
+
+Podemos limitar el tamaño de la lista agregando *<xsd:lenght value="valor">*
+
+Podemos establecer un rango al número de elementos, usando: *<xsd:minLenght value=valor"/>* y *<xsd:maxLenght value="valor"/>*
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:element name="talla">
+  <xsd:simpleType>
+    <xsd:list itemType="xsd:string"/>
+      <xsd:minLenght value="2" />
+      <xsd:maxLenght value="5" />
+    </xsd:list>
+  </xsd:simpleType>
+</xsd:element>
+----
+====
+
+
+==== Combinación de tipos simples
+
+Podemos combinar varios tipos simples en un único tipo más complejo. Para ello usamos un nuevo elemento de Esquema XML: <xsd:unión>. Con este atributo, indi- camos los distintos tipos de valores que puede tener un elemento o atributo.
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:element name="fecha">
+  <xsd:simpleType>
+    <xsd:union>
+      <xsd:simpleType>
+      <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="hoy"/>
+          <xsd:enumeration value="ayer"/>
+          <xsd:enumeration value="mañana"/>
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType>
+        <xsd:restriction base=" sd:date"/>
+      </xsd:simpleType>
+    </xsd:union>
+  </xsd:simpleType>
+</xsd:element>
+----
+====
+
+==== Tipos simples personales reutilizables
+
+Hay un medio para definir un tipo simple y reutilizarlo una y otra vezTodo lo que se tiene que hacer es crear un tipo simple que no esté dentro de un *<xsd:element>* y darle un nombre.
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:simpleType name="numTelefono">
+  <xsd:restriction base="xsd:string">
+    <xsd:pattern value="/^\d{9}$/"/>
+  </xsd:restriction>
+</xsd:simpleType>
+</xsd:element name="fijo" type="numTelefono"/>
+</xsd:element name="movil" type="numTelefono"/>
+</xsd:element name="fax" type="numTelefono"/> 
+----
+====
+
+
+
+=== Tipos complejos
+Pueden contener cualquier combinación de contenido de elementos, información de caracteres y atributos
+
+La forma más sencilla de crear un nuevo tipo es crear un elemento complexTyp mediante la siguiente sintaxis:
+
+[source. xsd]
+----
+<xsd:complexType name="nombredeltipocomplejo">
+----
+
+- *name* es nombre que se asigna el nuevo tipo.
+
+==== Expresiones regulares
+
+En algunas ocasiones se necesita que los datos se ajusten a un patrón determinado como un código postal, una fecha larga, un teléfono, un nombre de usuario o cualquier otro tipo.
+
+Para crear ese patrón, puede usarse un lenguaje especial llamado "expresión regular" que establece dónde pueden aparecer un tipo determinado de caracteres y en qué orden.
+
+Las expresiones regulares describen un conjunto de elementos que siguen un patrón. 
+
+
+===== Sintaxis de las expresiones regulares
+
+[width=100%, cols=3*^, cols = "1, 4, 6"]
+|====
+|^|Principio de entrada o línea|Indica que las cadenas deberán comenzar por el siguiente carácter
+^a La cadena debe empezar por a minúscula.
+|$|Fin de entrada o línea.|Indica que la cadena debe terminar por el elemento precedido al dólar.
+$a La cadena debe terminar por a minúscula.
+|.|Cualquier carácter individual.|Indica que puede haber cualquier carácter individual salvo el de salto de línea
+|*|El carácter anterior 0 o más veces.|Indica que el carácter anterior se puede repetir 0 o s veces.
+|+|El carácter anterior 1 o más veces.|Indica que el carácter anterior se puede repetir una o más veces
+|?|El carácter anterior una vez como máximo.|Indica que el carácter anterior se puede repetir cero o una vez
+|x\|y|x o y|La barra vertical indica que puede ser el carácter x o el y
+|{n}|n veces el carácter anterior. |El carácter anterior a las llaves tiene que aparecer n veces.
+|{n,m}|Entre n y m veces el carácter anterior.|El carácter anterior a las llaves tiene que aparecer como mínimo n y como máximo m veces.
+|[abc]|Cualquier carácter de los corchetes.|En la cadena puede aparecer cualquier carácter que esté incluido en los corchetes. Además, podemos especificar rangos de caracteres que sigan un orden. Si se es- pecifica el rango [a-z] equivaldría a incluir todas las letras minúsculas del abecedario.
+|[Aabc]|Un carácter que no esté en los corchetes.|En la cadena pueden aparecer todos los caracteres que no estén incluidos en los corchetes.También podemos especificar rangos de caracteres como en el punto anterior
+|\b|Fin de palabra.|Indica que tiene que haber un fin de palabra o retorno de carro.
+|\B|No fin de palabra.|Indica cualquiera que no sea un límite de palabra
+|\d|Cualquier carácter dígito.|Indica que puede haber cualquier carácter numérico, de 0 a 9.
+|\D|Carácter que no es dígito.|Indica que puede haber cualquier carácter siempre que no sea numérico.
+|\f|Salto de página.|Indica que tiene que haber un salto de página.
+|\n|Salto de línea.|Indica que tiene que haber un salto de línea.
+|\r|Retorno de carro.|Indica que tiene que haber un retorno de carro.
+|\s|Cualquier espacio en blanco.|Indica que tiene que haber un carácter individual de espacio en bland tabulaciones, saltos de página o saltos de línea.
+|\S|Carácter que no sea blanco.|Indica que tiene que haber cualquier carácter individual que no sea un espacio blanco.
+|\t|Tabulación|Indica que tiene que haber cualquier tabulación
+|\w|Carácter alfanumérico.|Indica que puede haber cualquier carácter alfanumérico.
+|\W|Carácter que no sea alfanumérico.|Indica que puede haber cualquier carácter que no sea alfanumérico
+|====
+
+[source, xml]
+----
+<!--Una expresión regular para validar un número de teléfono móvil sería: -->
+
+!\^[6]\d{8}$/
+----
+
+
+=== Elementos vacíos
+
+Para indicar que un elemento es vacío basta con no indicar sus valores e indicar el nombre del elemento sin indicar tipo de datos alguno.
+
+[source, xsd]
+----
+<xs:element name="alumno" >
+    <xs:complexType>
+        <xs:attribute name="nota" type="xs:string"/>
+    </xs:complexType>
+</xs:element>
+----
+
+En este caso el elemento _alumno_ sólo dispone de un atributo llamado _nota_, no será posible meter ningún contenido en la etiqueta de _alumno_. Si no deseamos atributos (aunque es muy extraño), entonces simplemente no habrá etiquetas attribute (pero sí todas las demás).
+
+
+=== Uso de grupos
+
+==== Grupo de elementos
+Si en una colección de elementos aparecen juntos en varios lugares del documento XML, se pueden agrupar todos en uno para que sea más fácil referirse a ellos. Este grupo de elementos tiene que estar declarado a nivel de la raíz para poder ser referenciado cualquier cantidad de veces.
+
+[source, xsd]
+----
+<xsd:group name="etiqueta">
+----
+
+*etiqueta* es la nombre que identificará a este grupo en cualquier parte del documento.
+
+Mediante *<xsd:group>* es posible definir un grupo de elementos para ser empleados en otro elemento *<complexType>* o *<simpleType>*.
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:group name="persona">
+  <xsd:sequence>
+    <xsd:element ref="nombre"/>
+    <xsd:element ref="localidad"/>
+    <xsd:element ref="provincia"/>
+    <xsd:element ref="correo" minOccurs="0" maxOccurs="unbounded"/>
+    <xsd:element ref="telefono" minOccurs="0" maxOccurs="2"/>
+    <xsd:element ref="edad"/>
+  </xsd:sequence>
+</xsd:group>
+
+<xsd:complexType name="alumnoDefinicion">
+  <xsd:group ref="persona"/>
+  <xsd:attribute name="id" type="xsd:integer" use="required"/> 
+  <xsd:attribute name="nota" type="xsd:string"/>
+</xsd:complexType> <xsd:element name="alumno" type="alumnoDefinicion"/>
+----
+
+[source, xml]
+----
+<alumno>
+  <nombre>Miguel Dueñas Suarez</nombre>
+  <localidad>Guadix</localidad>
+  <provincia>Granada</provincia>
+  <correo>miguel@gmail.net<correo/>
+  <telefono>958 77 33 22</telefono>
+  <edad>27</edad>
+</alumno>
+----
+====
+
+==== Grupo de atributos
+
+[source, xsd]
+----
+<xsd:attributegroup name="etiqueta">
+----
+
+
+*etiqueta* es el nombre que identificará a este grupo en cualquier parte del documento.
+
+Mediante *<xsd: attributegroup>* es posible definir un grupo de atributos para ser empleados en otro elemento.
+
+La declaración de un grupo de atributo es equivalente a una de elementos. La referencia a un grupo de atributos o de elementos se hace igual que para elementos y atributos individuales, usando el atributo _ref_ a grupos ya definidos
+
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<xsd:attributeGroup name="caracteristicas">
+  <xsd:attribute name="id" type="xsd:integer" use="required"/>
+    <xsd:attribute name="edad" type="xsd:integer"/>
+    <xsd:attribute name="nota" type="xsd:decimal"/>
+  </xsd:attributeGroup>
+<xsd:complexType name="definicionatributos">
+  <xsd:attributeGroup ref="caracteristicas"/>
+</xsd:complexType>
+<xsd:group name="persona">
+  <xsd:sequence>
+    <xsd:element ref="nombre"/>
+    <xsd:element ref="localidad"/>
+    <xsd:element ref="provincia"/>
+    <xsd:element ref="correo" minOccurs="0maxOccurs="unbounded"/>
+    <xsd:element ref="telefono" minOccurs="0" maxOccurs="2"/> 
+  </xsd:sequence>
+</xsd:group>
+<xsd:complexType name="alumnoDefinicion">
+  <xsd:group ref="persona"/>
+  <xsd:attribute ref="definicionatrubutos"/> 
+  <xsd:attribute name="nota" type="xsd:string"/>
+</xsd:complexType>
+<xsd:element name="alumno" type="alumnoDefinicion"/>
+----
+
+[source, xml]
+----
+<alumno id="765" edad="23" nota="6.9"> 
+  <nombre>Miguel Dueñas Suárez</nombre> 
+  <localidad> Guadix</localidad> 
+  <provincia>Granada</provincia>
+  <correo>miguel@gmail.net<correo/>
+  <teléfono>958 77 33 22</teléfono> 
+</alumno>
+----
+====
+
+
+=== Inclusión de declaraciones externas 
+
+Para incluir un esquema externo completo, debemos emplear el *<xsd:include>* con la siguiente sintaxis:
+
+[source, xsd]
+----
+<xsd:include schemaLocation="nombrearchivo.xsd"/>
+----
+
+*nombrearchivo.xsd*, es el archive de esquema a incluir.
+
+El usar este elemento de esquema XML, es como copiar y pegar el código desde un archivo externo al nuestro; una inclusión completa.
+
+[NOTE]
+====
+Las dos declaraciones o definiciones, tanto la actual como la externa, deben estar en el mismo espacio de nombres
+====
+
+En el caso de que las definiciones estén en distintos espacios de nombre, hemos de utilizar *<xsd:import>*
+
+
+=== Modificación de declaraciones externas
+Para poder modificar las declaraciones externas, podemos utilizar *<xsd:redefine>*.
+
+Esto va a permitir redefinir cualquiera de los elementos, atributos, tipos o grupos de ese archivo.
+
+El elemento *<xsd:redefine>*: Requiere que los elementos externos existan en el mismo espacio de nombres de destino que el esquema que se vuelve a definir. Los esquemas sin un espacio de nombres también se pueden volver a definir mediante el elemento redefine y los componentes definidos de nuevo se convierten en parte del espacio de nombres de destino del esquemaPor lo tanto *<xsd:redefine>*, requiere que se use con *<xsd:include>*.
+
+[NOTE]
+====
+Volver a definir elementos puede producir resultados inesperados, como definiciones incorrectas, en otras definiciones de tipo basadas en las que se definen de nuevo
+====
+
+[EXAMPLE]
+====
+[source, xsd]
+----
+<!-- Esquema "esquema2.xsd". -->
+
+<xs:complexType name="DefPersona">
+  <xs:sequence>
+    <xs:element name="nombre" />
+    <xs:element name="apellidos"/>
+    <xs:element name="localidad"/>
+    <xs:element name="provincia"/>
+    <xs:element name="telefono"/>
+  </xs:sequence>
+</xs:complexType>
+<xs:element name="persona" type="DefPersona"/>
+
+<!-- Esquema "esquema1.xsd". -->
+
+<xs:redefine schemaLocation="esquema2.xsd">
+  <xs:complexType name=" DefPersona ">
+    <xs:complexContent>
+      <xs:extension base=" DefPersona ">
+        <xs:sequence>
+          <xs:element name="nota" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:redefine>
+<xs:element name="alumno" type=" DefPersona"/>
+----
+====
+
+
+=== Importación de esquemas de otros espacios de nombre 
+En el caso de que las definiciones estén en distintos espacios de nombre, hemos de utilizar *<xsd:import>*, con la siguiente sintaxis:
+
+[source, xsd]
+----
+<xsd:import schemaLocation="nombre archivo.xsd"/>
+----
+*nombrearchivo.xsd* es el archivo de esquema a incluir.
+
+Diferencias entre *<xsd:include>* y *<xsd:import>*
+
+Además de las referidas al espacio de nombres,
+
+*<xsd:import>* permite utilizar el esquema de componentes de cualquier esquema, pero este no forma parte del documento.
+
+*<xsd:include>* permite agregar todos los componentes de un esquema incluido el que contiene el esquema, de forma que se incluye dentro del documento
+
+

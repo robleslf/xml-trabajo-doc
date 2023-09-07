@@ -1,0 +1,30 @@
+<!DOCTYPE animales [
+<!NOTATION jpg SYSTEM "programadegraficos.exe">
+<!ENTITY foto SYSTEM "fotos/foto.jpg" NDATA jpg>
+  <!ELEMENT animales (perro)*>
+  <!ELEMENT perro (nombre, raza)*>
+  <!ELEMENT nombre (#PCDATA)>
+  <!ELEMENT raza (#PCDATA)>
+  <!ATTLIST perro
+    fecha_nacimiento CDATA #REQUIRED
+    sexo (macho | hembra) #REQUIRED
+    ID ID #REQUIRED
+    madre IDREF #IMPLIED
+    padre IDREF #IMPLIED
+    fotos ENTITY #IMPLIED
+  >
+]>
+<animales>
+  <perro fecha_nacimiento="1/4/1994" sexo="hembra" ID="can1">
+    <nombre>Lala</nombre>
+    <raza>labrador</raza> 
+  </perro>
+  <perro fecha_nacimiento="30/5/1996" sexo="macho" ID="can2">
+    <nombre>Pinta</nombre>  
+    <raza>labrador</raza>
+  </perro>
+  <perro fecha_nacimiento="19/7/2000" sexo="macho" ID="can3" madre="can2" padre="can1" fotos="foto">
+    <nombre>Sultán</nombre> 
+    <raza>labrador</raza> 
+  </perro>
+  </animales>

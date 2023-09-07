@@ -1,0 +1,438 @@
+== Definición
+
+El lenguaje de marcado extensible (XML) es un formato de texto simple y muy flexible derivado de SGML (ISO 8879).
+
+XML (eXtensible Markup Language) es un metalenguaje que nos proporciona una manera sencilla de definición de lenguajes de etiquetas estructurados, en otras palabras, XML define un conjunto de reglas semánticas que nos permiten la organización de información de distintas maneras. Es un estándar definido por el W3C.
+
+Está formado solo por texto plano.
+
+== Documento bien formado
+
+Si un documento escrito en XML no está bien formado, no se considera un documento XML. Para que podamos decir que un documento está bien formado, este debe cumplir las siguientes normas:
+
+- *Un documento XML debe contener un único elemento raíz.* 
+
+- *Etiquetas cerradas.* Todos los elementos tienen que tener una etiqueta de cierre.
+
+- *Etiquetas vacías.* En XML se permiten elementos sin contenido:
+
+- *Los espacios en blanco.* Los nombre de las etiquetas NO deben comenzar por el carácter espacio en blanco.
+
+- *La Cabecera:*
+
+[source, XML]
+----
+<?xml version=1.0 encoding=UTF-8+?>
+----
+
+- *Secuencias de escape* Los caracteres "&", "<", ">", las comillas simples y las comillas dobles están prohibidas como contenido, y deben utilizarse símbolos de escape para utilizarlas.
+
+
+- *Estructura jerárquica de elementos.* 
+
+
+- *Comentarios.* Los comentarios no van dentro de la definición de una etiqueta
+
+- *Sólo caracteres aceptados por la codificación del documento.* Esta debe estar definida en el atribulo encoding del encabezado.
+
+- *Los elementos son case-sensitive*
+
+
+- *Nombrar elementos:*
+
+* No pueden empezar por:
+** La cadena "xml", "xMl", "XML" o cualquier otra variante.
+** Dígitos, guiones y caracteres de punto.
+* Las letras y guiones se pueden usar en cualquier parte del nombre.
+* También se pueden incluir dígitos, guiones y caracteres de punto. 
+* El resto de caracteres, como algunos símbolos y espacios en blanco, no se pueden usar.
+
+- *Valores de atributos* Los valores de atributos siempre deben estar encerradas en comillas simples (') o dobles (").
+
+- *Un elemento no tiene dos atributos con el mismo nombre*.
+
+== Documento válido
+
+Escribir un documento XML bien formado no es suficiente para crear un documento válido en cuanto al contenido de los elementos se refiere, ya que de alguna forma se tiene que limitar o controlar el tipo de datos a que se van a incluir dentro de los elementos. Para que un documento sea válido tiene que:
+
+- Respetar las restricciones impuestas a la posición de cada elemento en el documento
+
+- Respetar las restricciones impuestas a los atributos de cada elemento.
+
+- Requerir una definición de tipo de documento o un esquema XML para especificar las restricciones	
+
+
+== Estructura
+
+=== Etiquetas
+Una etiqueta (tag) es un texto que va entre el símbolo menor que (<) y el símbolo mayor que (>). La etiqueta de fin se forma anteponiendo al nombre da la etiqueta el carácter "/".
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<nombre> Juan Pérez Gómez </nombre>
+----
+====
+
+=== Elementos
+
+Un elemento XML es cualquier cosa que esté incluída entre la etiqueta inicial y la final:
+
+[EXAMPLE]
+====
+[source, XML]
+----
+<universo>
+    <galaxia>
+        <nombre>Vía Láctea</nombre>
+        <tipo>Espiral barrada</tipo>
+        <edad>13.6 mil millones de años</edad>
+        <estrellas>200-400 mil millones</estrellas>
+        <planetas>100-400 mil millones</planetas>
+    </galaxia>
+    <galaxia>
+        <nombre>Andrómeda</nombre>
+        <tipo>Espiral</tipo>
+        <edad>10-12 mil millones de años</edad>
+        <estrellas>~1 billón</estrellas>
+        <planetas>Desconocido</planetas>
+    </galaxia>
+</universo>
+
+----
+====
+
+También es posible que no contenga nada; se pueden escribir de estas dos formas:
+
+[EXAMPLE]
+====
+[source, XML]
+----
+<elemento></elemento>
+
+<elemento />
+----
+====
+
+=== Atributos
+
+Se llama atributo a la forma en que los elementos incorporan información relacionada acerca de sí mismos, describiendo sus propiedades, y acabando de dar significado a los nodos que constituyen el árbol del documento. Por tanto un elemento, además de su identificador, puede tener un conjunto de atributos, cada uno con su nombre y valor respectivo.
+
+Un atributo es un par nombre-valor que se encuentra dentro de la etiqueta de inicio de un elemento.
+
+[EXAMPLE]
+====
+[source, XML]
+----
+<pelicula categoria="accion">
+        <titulo idioma="inglés">Mad Max</titulo>
+        <director>George Miller</director>
+        <estreno>15 mayo 2015</estreno>
+        <reparto>Tom Hardy</reparto>
+        <reparto>Charlize Theron</reparto>
+        <reparto>Nicholas Hoult</reparto>
+    </pelicula>
+----
+====
+
+Los atributos de alguna forma están limitados. Los atributos:
+
+- No pueden contener múltiples valores
+- No pueden contener estructuras en árbol
+- No se pueden expandir fácilmente (para futuros cambios)
+
+=== Entidades
+
+Una entidad consiste en un nombre y un valor para su uso dentro del contenido de un documento.
+
+Para declarar una entidad, utilizamos la palabra clave *ENTITY* con la siguiente sintaxis:
+
+[source, xml]
+----
+<!ENTITY nombre_de_la_entidad "valor">
+----
+
+
+[EXAMPLE]
+====
+[source, XML]
+----
+<!ENTITY saludo "¡Hola, mundo!">
+----
+====
+
+Para usar la entidad previamente definida, utilizamos el carácter & en el contenido del elemento:
+
+[EXAMPLE]
+====
+[source, XML]
+----
+<nota>
+  <mensaje>&saludo;</mensaje>
+</nota>
+----
+====
+
+
+==== Tipos de entidades por procesabilidad
+
+- *Entidad no procesable*
+
+Son objetos no XML que el analizador XML no puede leer (datos binarios EXE, gráficos GIF, vídeos MPEG, etc.).
+
+- *Entidad procesable*
+
+Es aquella que al empezar a analizar un documento, el procesador XML la reconoce como tal y por tanto asocia a su nombre un valor con su texto de reemplazamiento, que puede ser desde un carácter a un archivo.
+
+
+[NOTE]
+====
+Hay entidades predefinidas para los caracteres para poder representarlos si fuera necesario: 
+
+- & (&amp;)
+
+- los paréntesis angular izquierdo (&lt;) y derecho (&gt;)
+
+- apóstrofos (&apos;) 
+
+- comillas (&quot;) 
+
+
+====
+
+==== Clasificación de entidades
+
+- *Entidades generales internas*
+
+Son abreviaturas definidas en la sección de la DTD del documento XML. Son siempre entidades analizadas, es decir, una vez reemplazada la referencia a la entidad por su contenido, pasa a ser parte del documento XML.
+
+[EXAMPLE]
+====
+[source, dtd]
+----
+<!ENTITY personaje "Pato Donald">
+<!ELEMENT texto (titulo)>
+<!ELEMENT titulo (#PCDATA)>
+----
+
+[source, xml]
+----
+<!DOCTYPE texto SYSTEM "texto.dtd">
+<texto>
+    <titulo>Las aventuras del &personaje;</titulo>
+</texto>
+----
+====
+
+- *Entidades generales externas*
+
+Obtienen su contenido en cualquier otro sitio del sistema, ya sea otro archivo del disco duro, una página web o un objeto de una base de datos. Se hace referencia al contenido de una entidad así mediante la palabra SYSTEM seguida de un URI.
+
+Sintaxis:
+
+[source, dtd]
+----
+<!ENTITY nombre_de_la_entidad SYSTEM "ruta_de_sistema">
+----
+
+
+[EXAMPLE]
+====
+[source, dtd]
+----
+<!ENTITY intro SYSTEM "http://www.miservidor.com/definicion.xml">
+----
+====
+
+- *Entidades parámetro internas*
+
+Son aquellas que sólo pueden usarse en la DTD, y no en el documento XML. Se pueden utilizar para agrupar ciertos elementos del DTD que se repitan mucho. Se diferencian las entidades parámetro de las generales, en que para hacer referencia a ellas, se usa el símbolo "%" en lugar de "&" tanto como para declararlas como para usarlas.
+
+Sintaxis:
+
+[source,dtd]
+----
+<!ENTITY %nombre_de_la_entidad "literal">
+----
+
+
+[EXAMPLE]
+====
+.academia.dtd:
+[source, dtd]
+----
+<!ELEMENT academia (director, docente, alumno*)>
+<!ENTITY % persona "( nombre|apellidos|direccion|localidad|cp)*">
+
+<!ELEMENT director %persona;>
+<!ELEMENT docente %persona;>
+<!ELEMENT alumno %persona;>
+
+<!ELEMENT nombre (#PCDATA)>
+<!ELEMENT apellidos (#PCDATA)>
+<!ELEMENT direccion (#PCDATA)>
+<!ELEMENT localidad (#PCDATA)>
+<!ELEMENT cp (#PCDATA)>
+----
+
+[source, xml]
+----
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE academia SYSTEM "academia.dtd">
+<academia>
+    <director>
+        <nombre>Juan</nombre>
+        <apellidos>Pérez</apellidos>
+        <direccion>Calle Principal 123</direccion>
+        <localidad>Ciudad Capital</localidad>
+        <cp>12345</cp>
+    </director>
+    <docente>
+        <nombre>Maria</nombre>
+        <apellidos>Gómez</apellidos>
+        <direccion>Avenida Secundaria 456</direccion>
+        <localidad>Ciudad Capital</localidad>
+        <cp>54321</cp>
+    </docente>
+    <alumno>
+        <nombre>Pablo</nombre>
+        <apellidos>Rodríguez</apellidos>
+        <direccion>Plaza Central 789</direccion>
+        <localidad>Ciudad Pequeña</localidad>
+        <cp>98765</cp>
+    </alumno>
+    <alumno>
+        <nombre>Zenón</nombre>
+        <apellidos>Zuloaga</apellidos>
+        <direccion>Plaza Central 789</direccion>
+        <localidad>Ciudad Pequeña</localidad>
+        <cp>98765</cp>
+    </alumno>    
+</academia>
+----
+====
+
+=== Comentarios
+
+Se pueden incluir comentarios en el documento XML. Estos serán ignorados por el procesado de la información. No pertenecen ni al marcado ni a la información contenida en el documento y  sirven para documentarlo en forma de comentarios internos.
+
+Los comentarios contienen tres partes:
+
+- El símbolo de inicio <!--
+
+- El comentario
+
+- El símbolo de cierre -\->
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<!-- esto es un comentario -->
+----
+====
+
+
+=== Inclusión de datos no XML
+
+Existe otra estructura en XML que permite especificar datos, utilizando cualquier carácter, especial o no, sin que se interprete como marcado XML.
+
+Es la construcción llamada *CDATA* (Character Data).
+
+La sintaxis de estas secciones se basa en la etiqueta de inicio "<![CDATA[" Y la etiqueta de fin "]]>".
+
+[EXAMPLE]
+[source, xml]
+====
+----
+<![CDATA[ Tus datos no XML aquí ]]>
+----
+====
+
+La sección CDATA te permite incluir datos que no se procesarán como elementos XML, lo que es útil para insertar fragmentos de código, scripts o cualquier otro tipo de contenido que no deba ser interpretado como XML.
+
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<nota>
+  <mensaje>
+    <![CDATA[
+      <p>Esto es un fragmento de código HTML en CDATA.</p>
+      <script>alert('Esto es un script en CDATA.');</script>
+    ]]>
+  </mensaje>
+</nota>
+----
+====
+
+
+=== Espacio de nombres
+
+Los espacios de nombres sirven para evitar las colisiones entre elementos del mismo nombre, y en general, para distinguir los distintos grupos de elementos en un mismo documento. Cada espacio de nombres se asocia con una URI, que sólo sirve como identificador único y no tiene por qué ser válida.
+
+No se trata de utilizar un URI como enlace, ni tiene por qué tener contenido, los URI sólo se utilizan para que el nombre sea único.
+
+==== Definir un espacio de nombres
+
+Para definir un espacio de nombres al que pertenece un elemento, es necesario añadir un atributo a la definición de elemento, donde el nombre del atributo sea *xmlns* (xml namespace») y el valor puede ser una cadena cualquiera, aunque por convención suelen ser URLS.
+
+[EXAMPLE]
+====
+[source, xml]
+----
+xmlns:alias="URI"
+----
+====
+
+Normalmente se suelen indicar en la etiqueta raíz del documento, pero se pueden indicar en una sección posterior cuando sea necesario.
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<finan:inversion xmlns:finan="http://www.financiero.es" xmlns:geo="http://www.geografia.com">
+</finan:inversion>
+----
+====
+
+
+==== Referenciar un espacio de nombre
+
+En el elemento anterior, se configura *finan* y *geo* como un prefijo que puede usarse para calificar el nombre del elemento actual y cualquier elemento dentro de él.
+
+
+
+[EXAMPLE]
+====
+[source,xml]
+----
+<finan:inversion xmlns:finan="http://www.financiero.es" xmlns:geo="http://www.geografia.com">
+    <geo:pais geo:nombre="España">  
+        <geo:capital>Madrid</geo:capital>
+        <finan:capital>2000€</finan:capital>
+    </geo:pais>
+</finan:inversion>
+----
+====
+
+
+==== Espacio de nombres por defecto
+
+Si un espacio de nombres se declara sin su sinónimo correspondiente, indicará que todos los elementos (incluido el elemento que declara el espacio de nombres) que contenga pertenecerán a dicho espacio de nombres. Esto será así siempre que los elementos no tengan el prefijo de otro espacio de nom- bres. Por tanto, sería como definir un espacio de nombres por defecto para los elementos que no tengan espacio de nombres asignado
+
+[EXAMPLE]
+====
+[source,xml]
+----
+<inversion xmlns="http://www.bolsa.es">
+    <geo:pais xmlns:geo="http://www.geografia.com" geo:nombre= "España">
+    <geo:capital>Madrid</geo:capital>
+    <capital>2000€</capital>
+    </geo:país>
+</inversion>
+----
+====
+

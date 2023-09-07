@@ -1,0 +1,23 @@
+:authors: Sandra Mouriño Tejo, Elías Fernández Moldes, Felipe Robles López
+:authorinitials: SEF
+:doc-date: 2023-08-07
+:doc-version: 1.0
+:doctype: book
+
+:toc: left
+:toclevels: 5
+:icons: font
+:source-highlighter: highlight.js
+
+:title: Guía XML
+:toc-title: XML
+
+= {title}
+
+include::001_formato.adoc[]
+include::002_dtd.adoc[]
+include::003_esquemas.adoc[]
+include::004_acceso_informacion_xml.adoc[]
+include::005_transformacion.adoc[]
+include::006_otros_lenguajes.adoc[]
+include::007_aplicaciones_de_xml.adoc[]

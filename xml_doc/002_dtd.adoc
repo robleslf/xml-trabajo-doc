@@ -1,0 +1,690 @@
+== DTD
+
+=== Definición
+
+Una DTD es un documento que define la estructura de un documento XML: los elementos, atributos, entidades, notaciones, etc, que pueden aparecer, el orden y el número de veces que pueden aparecer, cuáles pueden ser hijos de cuáles, etc. El procesador XML utiliza la DTD para verificar si un documento es válido, es decir, si el documento cumple las reglas de la DTD.
+
+=== Estructura
+
+Una DTD se compone de:
+
+- Una colección de declaraciones de elementos (*ELEMENT*)
+
+- Declaraciones de atributos (*ATTLIST*)
+
+- Declaraciones de entidades (*ENTITY*)
+
+- Notaciones (*NOTATION*) a partir de las cuales se describe la validez de un documento.
+
+
+La DTD, se define siguiendo la *sintaxis*:
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<!DOCTYPE nombre SYSTEM "nombre_archivo.dtd">
+
+<!--"nombre" es el nombre del documento XML, que debe coincidir con el nombre del elemento raíz del documento.-->
+----
+====
+
+[NOTE]
+====
+El DTD y el XML están en un archivo .dtd y .xml respectivamente
+====
+
+=== Declaraciones de elementos
+
+Los elementos de una DTD son los bloques primarios de todo documentos y se declaran de la siguiente forma:
+
+[EXAMPLE]
+====
+[source, dtd]
+----
+<!ELEMENT nombre (modelo de contenido)>
+----
+====
+
+Esto se empieza con *<!ELEMENT*, seguido de un nombre llamado identificador, y los paréntesis que siguen especifican el contenido que está permitido
+
+
+
+[EXAMPLE]
+====
+.receta.dtd:
+[source, dtd]
+----
+  <!ELEMENT receta (plato, ingredientes, preparación)>
+  <!ELEMENT plato (#PCDATA)>
+  <!ELEMENT ingredientes (#PCDATA)>
+  <!ELEMENT preparación (#PCDATA)>
+----
+
+[source, xml]
+----
+<!DOCTYPE receta SYSTEM "receta.dtd">
+<receta>
+  <plato>Flan</plato>
+  <ingredientes>Leche, Huevos, Paciencia</ingredientes>
+  <preparación>Batir los huevos...</preparación>
+</receta>
+----
+====
+
+==== Tipos de declaración
+
+===== Declaración interna
+Hace referencia al mismo documento XML
+
+[EXAMPLE]
+====
+.lista_tareas.dtd:
+[source, dtd]
+----
+    <!ELEMENT lista_tareas (tarea+)>
+    <!ELEMENT tarea (#PCDATA)>
+----
+
+[source, xml]
+----
+<!DOCTYPE lista_tareas SYSTEM "lista_tareas.dtd">
+<lista_tareas>
+    <tarea>Hacer la compra</tarea>
+    <tarea>Llamar al médico</tarea>
+    <tarea>Enviar correo electrónico</tarea>
+</lista_tareas>
+----
+====
+
+
+===== Declaración externa
+Hace referencia a una DTD almacenada en un archivo externo al del XML
+
+La sintaxis es la siguiente:
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<!DOCTYPE nombre SYSTEM "URI">
+----
+====
+URI hace referencia al fichero .dtd
+
+===== Declaración combinada
+
+Se puede combinar una DTD externa con una DTD interna, con la siguiente sintaxis:
+
+[EXAMPLE]
+====
+[source, xml]
+----
+<!DOCTYPE nombre PUBLIC "URI" [
+  declaraciones ...
+]>
+----
+====
+
+==== PCDATA
+Define que un elemento puede contener texto simple. 
+No admite "<", ">", "&".
+
+
+[EXAMPLE]
+====
+.persona.dtd:
+[source, dtd]
+----
+<!ELEMENT persona (nombre, apellido, teléfono)>
+<!ELEMENT nombre (#PCDATA)>
+<!ELEMENT apellido (#PCDATA)>
+<!ELEMENT teléfono (#PCDATA)>
+----
+
+[source, xml]
+----
+<!DOCTYPE persona SYSTEM persona.dtd>
+<persona>
+  <nombre>Juan</nombre>
+  <apellido>Gómez</apellido>
+  <teléfono>987456321</teléfono>
+</persona>
+----
+====
+
+==== Elementos hijos
+Cuando un elemento pueda contener en su interior a otro elementos, se indica escribiendo entre paréntesis el nombre de estos.
+
+[EXAMPLE]
+====
+[source, dtd]
+----
+<!ELEMENT libro (titulo, autor, contenido)>
+<!ELEMENT titulo (#PCDATA)>
+<!ELEMENT autor (#PCDATA)>
+<!ELEMENT contenido (#PCDATA)>
+----
+====
+
+==== Número de hijos
+Podemos controlar el número de elementos que pueden ir dentro de otro elemento, añadiendo un sufijo al nombre del elemento:
+
+
+.Número de hijos
+[options="header", width=50%, cols=2*^]
+|====
+|Sufijo|Elementos
+|?| 0 o 1
+|*| 0 o más
+|+| 1 o más
+|====
+
+
+[EXAMPLE]
+====
+.xxx.dtd:
+[source, dtd]
+----
+    <!ELEMENT xxx (aaa?, bbb+)>
+    <!ELEMENT aaa (ccc?, ddd*)>
+    <!ELEMENT bbb (ccc, ddd)>
+    <!ELEMENT ccc (#PCDATA)>
+    <!ELEMENT ddd (#PCDATA)>
+----
+
+[source, xml]
+----
+<!DOCTYPE xxx SYSTEM "xxx.dtd">
+<xxx>
+  <aaa>    
+    <ccc/>
+    <ddd/>
+    <ddd/>
+  </aaa>
+  <bbb>
+    <ccc/>
+    <ddd/>
+  </bbb>
+</xxx>
+----
+====
+
+
+==== Opciones
+Con el carácter "|" se puede seleccionar *uno* de entre varios elementos
+
+
+[EXAMPLE]
+====
+[source, dtd]
+----
+<!ELEMENT xxx (aaa | bbb)>
+----
+====
+
+==== Elementos vacíos
+Pueden ser definidios por *EMPTY*. En este caso solo puede contener atributos, pero no texto.
+
+[EXAMPLE]
+====
+.lista_tareas.dtd:
+[source, dtd]
+----
+<!ELEMENT lista_tareas (tarea+, importante)>
+<!ELEMENT tarea (#PCDATA)>
+<!ELEMENT importante EMPTY>
+----
+
+[source, xml]
+----
+<!DOCTYPE lista_tareas SYSTEM "lista_tareas.dtd">
+<lista_tareas>
+    <tarea>Hacer la compra</tarea>
+    <tarea>Llamar al electricista</tarea>
+    <importante/>
+</lista_tareas>
+----
+====
+
+==== ANY
+Con él indicamos que un elemento puede contener cualquier cosa.
+
+
+[EXAMPLE]
+====
+.persona.dtd:
+[source, dtd]
+----
+  <!ELEMENT persona (nombre, apellidos, teléfono, profesión)>
+  <!ELEMENT nombre (#PCDATA)>
+  <!ELEMENT apellidos ANY>
+  <!ELEMENT teléfono (#PCDATA)>
+  <!ELEMENT profesión (#PCDATA)>
+----
+
+[source, xml]
+----
+<!DOCTYPE persona SYSTEM "persona.dtd">
+<persona>
+  <nombre>Juan</nombre>
+  <apellidos>Gómez Sánchez
+      <nombre>Raquel</nombre>
+      <apellidos>Gómez López</apellidos>
+      <teléfono/>
+  </apellidos>
+  <teléfono>987456632</teléfono>
+  <profesión>Fontanero</profesión>
+</persona>
+----
+====
+
+.Declaraciones de elementos
+[options="header", width=80%, cols=3*^]
+|===
+3+| ELEMENT   
+| (#PCDATA) Sólo Texto | (elemento) Otro elemento | (#PCDATA\|elemento) Texto o elemento
+|  | (e1, e2, e3, ...)  Varios elementos | 
+|  | (e?) 0 o 1 elemento | 
+|  | (e*) O o más elemetos | 
+|  | (e+) 1 o más elementos | 
+|  | (e1 \| e2) o e1 o e2 | 
+|  | (e EMPTY) elemento vacío | 
+|  | (e ANY) cualquier contenido | 
+|===
+
+=== Declaraciones de atributos
+
+Los atributos no pueden contener subatributos. Se usan para añadir información corta, sencilla y desestructurada.
+
+La sintaxis para validar los valores de los atributos es:
+
+[EXAMPLE]
+====
+[source, dtd]
+----
+<!ATTLIST elemento atributo (valor1 | valor2 | valor3...)>
+----
+====
+
+.Lista de valores
+[options="header", width=80%, cols=4*^]
+|===
+4+| <!ATTLIST elemento atributo (valor1 \| valor2 \| valor3...) ...>   
+| Valor por defecto | #REQUIRED | #IMPLIED | #FIXED
+| Atributo opcional | Atributo obligatorio | Atributo no obligatorio | Atributo fijo
+|===
+
+==== CDATA
+Admite cualquier tipo de texto, con cualquier longitud, con cualquier número de caracteres. No distingue entre texto, booleanos, números, porcentajes, etc.
+
+[EXAMPLE]
+====
+.mensaje.dtd:
+[source, dtd]
+----
+  <!ELEMENT mensaje (de, a, asunto, texto)>
+  <!ATTLIST mensaje prioridad (normal | urgente) "urgente">
+  <!ELEMENT de (#PCDATA)>
+  <!ELEMENT a (#PCDATA)>
+  <!ELEMENT asunto EMPTY>
+  <!ATTLIST asunto contenido CDATA #REQUIRED>
+  <!ELEMENT texto (#PCDATA)>
+  <!ATTLIST texto idioma (español | francés | inglés) #REQUIRED>
+----
+
+[source, xml]
+----
+<!DOCTYPE mensaje SYSTEM "mensaje.dtd">
+<mensaje prioridad="normal">
+  <de>José Solana</de>
+  <a>Andrea Maldonado</a>
+  <asunto contenido="Preguntamos por la salud!-$%&amp;/0"></asunto>
+  <texto idioma="español">
+    Hola Andrea, ¿Cómo va el día?
+    Adiós Andrea
+  </texto>
+</mensaje>
+----
+====
+
+==== NMTOKEN
+Los atributos NMTOKEN (name token) son como los atributos CDATA, pero sólo aceptan los siguientes caracteres:
+
+- Letras.
+
+- Números.
+
+- Puntos.
+
+- Guiones.
+
+- Barra baja.
+
+- Dos puntos.
+
+[NOTE]
+====
+No puede contener espacios
+====
+
+La sintaxis es la siguiente:
+
+[source, dtd]
+----
+<!ATTLIST elemento atributo NMTOKEN #REQUIRED >
+----
+
+[EXAMPLE]
+====
+.mensaje.dtd:
+[source, dtd]
+----
+  <!ELEMENT mensaje (de, a, asunto, texto)>
+  <!ATTLIST mensaje prioridad (normal | urgente) "urgente">
+  <!ELEMENT de (#PCDATA)>
+  <!ELEMENT a (#PCDATA)>
+  <!ELEMENT asunto EMPTY>
+  <!ATTLIST asunto contenido NMTOKEN #REQUIRED>
+  <!ELEMENT texto (#PCDATA)>
+  <!ATTLIST texto idioma (español | francés | inglés) #REQUIRED>
+----
+
+
+[source, xml]
+----
+<!DOCTYPE mensaje SYSTEM "mensaje.dtd">
+<mensaje prioridad="normal">
+  <de>José Solana</de>
+  <a>Andrea Maldonado</a>
+  <asunto contenido="Preguntamos_por_la_salud"></asunto>
+  <texto idioma="español">
+    Hola Andrea, ¿Cómo va el día?
+    Adiós Andrea
+  </texto>
+</mensaje>
+----
+====
+
+==== NMTOKENS 
+Puede contener varios valores de NMTOKEN separados por *espacios*.
+
+La sintaxis es la siguiente:
+
+[source, dtd]
+----
+<!ATTLIST elemento atributo NMTOKENS #REQUIRED >
+----
+
+[EXAMPLE]
+====
+.mensaje.dtd:
+[source, dtd]
+----
+  <!ELEMENT mensaje (de, a, asunto, texto)>
+  <!ATTLIST mensaje prioridad (normal | urgente) "urgente">
+  <!ELEMENT de (#PCDATA)>
+  <!ELEMENT a (#PCDATA)>
+  <!ELEMENT asunto EMPTY>
+  <!ATTLIST asunto contenido NMTOKENS #REQUIRED>
+  <!ELEMENT texto (#PCDATA)>
+  <!ATTLIST texto idioma (español | francés | inglés) #REQUIRED>
+----
+
+[source, xml]
+----
+<!DOCTYPE mensaje SYSTEM "mensaje.dtd">
+<mensaje prioridad="normal">
+  <de>José Solana</de>
+  <a>Andrea Maldonado</a>
+  <asunto contenido="Preguntamos por la salud"></asunto>
+  <texto idioma="español">
+    Hola Andrea, ¿Cómo va el día?
+    Adiós Andrea
+  </texto>
+</mensaje>
+----
+====
+
+==== ID
+
+Es un identificador que es un valor único que tendrá cada elemento.
+
+[NOTE]
+====
+Los atributos ID solo pueden indicar #IMPLIED o #REQUIRED en el apartado de valor por defecto
+No puede haber dos elementos con un mismo ID
+====
+
+[EXAMPLE]
+====
+.estudiantes.dtd:
+[source, dtd]
+----
+<!ELEMENT estudiantes (estudiante+)>
+<!ELEMENT estudiante (#PCDATA)>
+<!ATTLIST estudiante ID ID #REQUIRED>
+----
+
+[source, xml]
+----
+<!DOCTYPE estudiantes SYSTEM "estudiantes.dtd">
+<estudiantes>
+  <estudiante ID="e1">Juan</estudiante>
+  <estudiante ID="e2">María</estudiante>
+</estudiantes>
+----
+====
+
+==== IDREF
+Contienen el valor de un ID de otro elemento. Es decir, será una refencia a otro elemento. Por lo tanto, debe existir un atributo ID
+
+[EXAMPLE]
+====
+.datos.dtd:
+[source, dtd]
+----
+  <!ELEMENT datos (estudiantes, calificaciones)>
+  <!ELEMENT estudiantes (estudiante+)>
+  <!ELEMENT estudiante (#PCDATA)>
+  <!ATTLIST estudiante ID ID #REQUIRED>
+
+  <!ELEMENT calificaciones (calificacion+)>
+  <!ELEMENT calificacion EMPTY>
+  <!ATTLIST calificacion estudianteID IDREF #REQUIRED>
+  <!ATTLIST calificacion nota CDATA #REQUIRED>
+----
+
+[source, xml]
+----
+<!DOCTYPE datos SYSTEM "datos.dtd">
+<datos>
+  <estudiantes>
+    <estudiante ID="e1">Juan</estudiante>
+    <estudiante ID="e2">María</estudiante>
+  </estudiantes>
+  <calificaciones>
+    <calificacion estudianteID="e1" nota="95" />
+    <calificacion estudianteID="e2" nota="88" />
+  </calificaciones>
+</datos>
+----
+====
+
+==== IDREFS
+
+Contiene el valor de un id de otro elemento y permite indicar varias referencias simultáneas
+
+[EXAMPLE]
+====
+.datos.dtd:
+[source, dtd]
+----
+  <!ELEMENT datos (personas, grupos, clases)>
+
+  <!ELEMENT personas (persona+)>
+  <!ELEMENT persona (#PCDATA)>
+  <!ATTLIST persona id_persona ID #REQUIRED>
+
+  <!ELEMENT grupos (grupo+)>
+  <!ELEMENT grupo (#PCDATA)>
+  <!ATTLIST grupo id_grupo ID #REQUIRED>
+
+  <!ELEMENT clases (clase+)>
+  <!ELEMENT clase (#PCDATA)>
+  <!ATTLIST clase id_persona IDREFS #REQUIRED>
+  <!ATTLIST clase id_grupo IDREF #REQUIRED>
+----
+[source, xml]
+----
+<!DOCTYPE datos SYSTEM "datos.dtd">
+<datos>
+  <personas>
+    <persona id_persona="p1">Juan</persona>
+    <persona id_persona="p2">María</persona>
+    <persona id_persona="p3">Pedro</persona>
+  </personas>
+
+  <grupos>
+    <grupo id_grupo="A">Grupo A</grupo>
+    <grupo id_grupo="B">Grupo B</grupo>
+  </grupos>
+  
+  <clases>
+    <clase id_persona="p1 p2" id_grupo="A"></clase>
+    <clase id_persona="p3" id_grupo="B"></clase>
+  </clases>
+</datos>
+----
+====
+
+==== ENTITY
+El valor de un atributo será una entidad general no analizada, de la cual se indica el nombre. La sintaxis es:
+
+[source, dtd]
+----
+<!ENTITY nombreEntidad SYSTEM "URI" NDATA nombreNotacion>
+
+<!ATTLIST elemento atributo ENTITY #IMPLIED>
+----
+
+[EXAMPLE]
+====
+.animales.dtd:
+[source, dtd]
+----
+  <!NOTATION jpg SYSTEM "programadegraficos.exe">
+  <!ENTITY foto SYSTEM "fotos/foto.jpg" NDATA jpg>
+  <!ELEMENT animales (perro)*>
+  <!ELEMENT perro (nombre, raza)*>
+  <!ELEMENT nombre (#PCDATA)>
+  <!ELEMENT raza (#PCDATA)>
+  <!ATTLIST perro
+    fecha_nacimiento CDATA #REQUIRED
+    sexo (macho | hembra) #REQUIRED
+    ID ID #REQUIRED
+    madre IDREF #IMPLIED
+    padre IDREF #IMPLIED
+    fotos ENTITY #IMPLIED
+  >
+----
+
+[source, xml]
+----
+<!DOCTYPE animales SYSTEM "animales.dtd">
+<animales>
+  <perro fecha_nacimiento="1/4/1994" sexo="hembra" ID="can1">
+    <nombre>Lala</nombre>
+    <raza>labrador</raza> 
+  </perro>
+  <perro fecha_nacimiento="30/5/1996" sexo="macho" ID="can2">
+    <nombre>Pinta</nombre>  
+    <raza>labrador</raza>
+  </perro>
+  <perro fecha_nacimiento="19/7/2000" sexo="macho" ID="can3" madre="can2" padre="can1" fotos="foto">
+    <nombre>Sultán</nombre> 
+    <raza>labrador</raza> 
+  </perro>
+  </animales>
+----
+====
+
+[NOTE]
+====
+En un mismo atributo pueden ir varias ENTITY
+====
+
+[EXAMPLE]
+====
+.animales.dtd:
+[source, dtd]
+----
+  <!NOTATION jpg SYSTEM "programadegraficos.exe">
+  <!ENTITY foto1 SYSTEM "fotos/foto1.jpg" NDATA jpg>
+  <!ENTITY foto2 SYSTEM "fotos/foto2.jpg" NDATA jpg>
+  <!ENTITY foto3 SYSTEM "fotos/foto3.jpg" NDATA jpg>
+  <!ELEMENT animales (perro)*>
+  <!ELEMENT perro (nombre, raza)*>
+  <!ELEMENT nombre (#PCDATA)>
+  <!ELEMENT raza (#PCDATA)>
+  <!ATTLIST perro
+    fecha_nacimiento CDATA #REQUIRED
+    sexo (macho | hembra) #REQUIRED
+    ID ID #REQUIRED
+    madre IDREF #IMPLIED
+    padre IDREF #IMPLIED
+    fotos ENTITY #IMPLIED
+  >
+----
+
+[source, xml]
+----
+<!DOCTYPE animales SYSTEM "animales.dtd">
+<animales>
+  <perro fecha_nacimiento="1/4/1994" sexo="hembra" ID="can1">
+    <nombre>Lala</nombre>
+    <raza>labrador</raza> 
+  </perro>
+  <perro fecha_nacimiento="30/5/1996" sexo="macho" ID="can2">
+    <nombre>Pinta</nombre>  
+    <raza>labrador</raza>
+  </perro>
+  <perro fecha_nacimiento="19/7/2000" sexo="macho" ID="can3" madre="can2" padre="can1" fotos="foto1 foto2 foto3">
+    <nombre>Sultán</nombre> 
+    <raza>labrador</raza> 
+  </perro>
+  </animales>
+----
+====
+
+==== NOTATION
+Permite declarar que su valor se ajusta a una notación declarada con anterioridad
+[source, dtd]
+----
+<!NOTATION nombre definición_externa "URL">
+----
+
+La definición externa puede ser pública o privada:
+
+[EXAMPLE]
+====
+[source, dtd]
+----
+<!NOTATION HTML SYSTEM "http://www.w3.org/Markup">
+
+<!NOTATION HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+----
+====
+
+=== Inclusión condicional
+Las secciones condicionales permiten excluir reglas en los DTD en función de condiciones. Las secciones condicionales solo se pueden ubicar en *DTDs externos*.
+
+Sintaxis:
+
+[source, dtd]
+----
+<![IGNORE [
+    <!ELEMENT nombre (#PCDATA)>
+]]>
+----
+

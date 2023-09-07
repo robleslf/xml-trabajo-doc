@@ -1,0 +1,482 @@
+== XPath
+Es la primera recomendación que presentó W3C.
+
+XPath es un lenguaje declarativo basado en cadenas de expresiones (no basado en XML) que pueden usarse dentro de URIS y de atributos XML, y cuyo objetivo es localizar partes específicas de un documento utilizando para el procesado de sus valores un modelo de datos del documento basado en una estructura de árbol.
+
+=== Estructura en árbol de nodos
+
+Un documento XML es un árbol formado por nodos. Cada uno de estos nodos, pueden contener a su vez uno o más nodos.
+
+Hay un solo nodo raíz del que descienden el resto de los nodos. Para XPath, existen siete tipos de nodos:
+
+- Nodo raíz
+
+- Nodos de texto.
+
+- Nodos de comentarios.
+
+- Nodos de elementos.
+
+- Nodos de atributos.
+
+- Nodos de espacios de nombre.
+
+- Nodos de instrucciones de procesamiento.
+
+Hay que tener en cuenta las construcciones que no se incluyen en esta lista porque no se consideran nodos en un sentido estricto:
+
+- Las secciones CDATA.
+
+- Las referencias de entidad.
+
+- Las declaraciones de tipo de documento
+
+El nodo raíz del árbol no es el igual que el elemento raíz. El nodo de raíz del arbol con tiene todo el documento, que incluye el elemento raíz así como cualquier comentario e instrucciones de procesamiento que se produzcan antes de la etiqueta de inicio del elemento raíz o después de la etiqueta final del elemento raíz. En el ejemplo anterior, el nodo raíz contiene la instrucción de procesamiento xml-stylesheet así como el ele mento raíz people y evidentemente todo su contenido.
+
+Sin embargo, el modelo de datos XPath no incluye todo el documento. En concreto la declaración XML, la declaración DOCTYPE y las diversas partes de la DTD no se procesan a través de XPath. En el caso de que la DTD proporcione valores predeterminados para cualquier atributo, entonces dichos atributos sí los procesa XPath.
+
+Este modelo de datos se basa en tres bloques:
+
+- Valores atómicos de varios tipos, unos generales (cadenas, enteros, etc.) y otros más especializados como nombres cualificados o URIs.
+
+- Arboles cuyos nodos representan el contenido de un documento XML.
+
+- Secuencias (o listas) cuyos items son valores atómicos o referencias a nodos en los árboles correspondientes.
+
+=== Sintaxis y notación
+
+Junto con una biblioteca de funciones, la sintaxis de XPath está orientada tanto a de- finir partes del documento como a proporcionar rutas hacia los elementos.
+
+XPath utiliza la barra (/) seguida de una lista con los nombres de los elementos hijo, que en su conjunto describen un recorrido a través del documento.
+
+En XPath se llama *Ruta de Búsqueda* (location path) al conjunto de nodos sobre los que se evalúa una expresión XPath, que obtendrá como resultado otro conjunto de nodos, formado por aquellos que cumplen los criterios especificados en la expresión.
+
+Para dar los nodos del trayecto, se empieza designando un punto concreto, llamado nodo contexto, que es el nodo del árbol XPath del documento desde el que se inicia el trayecto de búsqueda.
+
+Tanto el concepto de nodo contexto como el de ruta de búsqueda son análogos a los utilizados en la gestión de archivos. De esta forma, en XPath, a menos que se indique un trayecto explícito, se entiende que el trayecto de búsqueda parte del nodo que en cada momento se esté procesando. 
+
+Los trayectos de búsqueda pueden ser: 
+
+- *absolutos*: empiezan con una barra (/) que determina el nodo contexto
+
+- *relativos*; carece de (/) al inicio, y el nodo contexto pasa a depender del lugar del documento en el que se esté trabajando en el momento de invocar el trayecto de búsqueda.
+
+
+=== Operadores XPath
+|===
+|Carácter | Significado
+
+| `/`
+| Ruta en el árbol
+
+Nodo Raíz
+
+| `//`
+| Se seleccionan todos los elementos del documento con dependencia del nivel que ocupen en el árbol
+
+| `\|`
+| Selecciona varios recorridos a la vez
+
+2+| Los operadores se pueden combinar entre sí
+
+|===
+
+=== Elementos de la ruta de búsqueda
+==== Ejes 
+Los Ejes son elementos encargados de especificar en untrayecto de búsqueda la relación existente dentro del árbol XPath, entre los distintos nodos que quieren seleccionarse en el trayecto, y el nodo contexto de donde se parte.
+
+Existen 13 tipos de ejes:
+
+- *Self:* identifica el nodo contexto y se especifica mediante *un punto (.)*
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_3.jpg[width=500, align="center"]
+
+- *Child:* describe los hijos del nodo contexto y se expresa de la forma */child::*
+Puede omitirse de un trayecto de búsqueda, al ser un eje por defecto.
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_4.jpg[width=500, align="center"]
+
+- *Descendant:* selecciona cualquier nodo que sea descendiente del conjunto de nodos contexto, expresándose de la forma *//descendant::*
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_5.jpg[width=500, align="center"]
+
+- *Descendant-or-self:* selecciona cualquier nodo que sea descendiente del conjunto de nodos contexto y al propio nodo contexto, expresándose de la forma *//descendant-or-selft::*
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_6.jpg[width=500, align="center"]
+
+- *Parent:* indica el nodo padre del nodo contexto. Su sintaxis es *dos puntos seguidos(..)*
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_7.jpg[width=500, align="center"]
+
+- *Ancestor:* indica el nodo padre del nodo contexto y todos sus antecesores. Su sintaxis es *//ancestor::*
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_8.jpg[width=500, align="center"]
+
+- *Ancestor-or-self:* Ancestor-or-seft: indica el nodo padre del nodo contexto y todos sus antecesores. Su sintaxis es *//ancestor-or-self::*
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_9.jpg[width=500, align="center"]
+
+- *Preceding/following:* El eje preceding contiene todos los nodos que aparecen antes del nodo de contexto, excluyendo los ancestros. El eje following contiene todos los nodos que aparecen después del nodo de contexto, excluyendo los descendientes. Su sintaxis es *// preceding::* o *// following::*
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_10.jpg[width=500, align="center"]
+
+- *Preceding-sibling /following-sibling:* El eje preceding-sibling contiene los hermanos precedentes del nodo de con- texto. El eje following-sibling contiene los hermanos situados detrás del nodo de contexto. Su sintaxis es *// preceding-sibling::* o // *following-sibling::*
+
+image::https://www.data2type.de/fileadmin/images/XPath_img_11.jpg[width=500, align="center"]
+
+- *Attribute:* contiene los atributos de un determinado nodo, su sintaxis es *//attribute::*
+Se puede abreviar usando @ como prefijo del elemento buscado; por ejemplo: *//@pais* selecciona todos los atributos con el nombre de pais, o bien *// attribute::país*
+
+==== Nodos de comprobación o búsqueda
+Los nodos de comprobación o búsqueda (node test) son los encargados de identificar un nodo o nodos concretos dentro de un eje
+
+Su función dentro de la ruta de búsqueda es que cada eje pueda determinar un tipo de nodo (llamado principal) a la hora de efectuar la selección. Este nodo de comprobación puede indicarse bien por nombre o bien por tipo. 
+
+Son los nodos más usados:
+
+- *node():* devuelve todos los nodos de cualquier tipo.
+
+Para seleccionar todos los nodos descendientes del tipo párrafo, se escribe /parrafo/node() 
+
+- **:* selecciona los nodos principales de cada trayecto (a excepción de los tipo texto, comentario e instrucciones de proceso) indicando su nivel en el árbol.
+
+/comidas/plato/* selecciona todos los elementos hijos de todos los elementos plato.
+
+- *text():* devuelve cualquier nodo de tipo texto.
+
+[EXAMPLE]
+====
+Para seleccionar el texto de todos los nodos párrafo:
+
+- //parrafo/text
+
+Y para seleccionar TODO el texto que cuelga de todos los nodos tipo párrafo:
+
+- //parrafo//text
+====
+
+==== Predicados
+Los predicados son elementos que en una ruta de búsqueda permiten restringir dentro del conjunto de nodos seleccionados por un eje a aquellos nodos que cumplan una cierta condición debidamente especificada, de forma que un predicado especifica con mayor detalle la información que se requiere, permitiendo filtrar un conjunto dado
+
+Para la obtención de un predicado se recurre a identificaciones o a las funciones propias de XPath escritas entre corchetes ([....]).
+
+*Ruta[predicado*]
+
+
+=== Expresiones
+
+==== Expresiones numéricas
+En XPath no existen los enteros puros. Todos los números son de 8 bytes, dobles de punto flotante IEEE754, incluso aunque no tengan un punto decimal explícito.
+
+XPath proporciona cinco operadores aritméticos básicos con los que está familiariza- do cualquier programador:
+
+[cols = "2", width = "25%", cols = "1,4"]
+|===
+
+| +
+| Suma
+
+| -
+| Resta
+
+| *
+| Multiplicación
+
+| div
+| División
+
+| mod
+| Resto
+|===
+
+
+==== Expresiones de igualdad
+
+Dados dos valores en una expresión XPath se puede comprobar su igualdad (=) o desigualdad (!=) obteniendo un cierto o falso.
+
+==== Expresiones relacionales
+
+Se usan para comparar dos valores, según su orden, siendo bien conocidas las posibilidades existentes: <, <=, >,>=, donde de nuevo XPath convierte cada operando a un número antes de evaluar la expresión.
+
+==== Expresiones booleanas
+
+Las expresiones habituales son or y and, y también se puede especificar una expresión booleana con not, como negación del predicado
+
+=== Funciones
+
+En XPath existe una completa biblioteca de funciones para convertir y transferir datos cuya razón de ser es ayudar a restringir el conjunto de nodos devueltos en una ex presión XPath.
+
+==== Booleanas
+
+Todas devuelven un valor booleano que puede ser true o false.
+
+*true()* siempre devuelve el valor true si no es 0 o NaN
+
+*false()* siempre devuelve el valor false si es 0 o NaN
+
+*not()* invierte el sentido de su argumento booleano.
+
+===== boolean()
+
+Convierte su único argumento en un valor booleano y devuelve el resultado. Si se omite el argumento, convierte el nodo de contexto. Los conjuntos de nodos son false si están vacíos, y true si contienen al menos un nodo. Las cadenas son false si tienen una longitud cero; en caso contrario, son true.
+
+===== lang()
+
+Devuelve true si el argumento lenguaje concuerda con el lenguaje que corresponde al elemento xshlangy, y en caso contrario devuelve false, de la forma: bool=lang(lenguaje)
+
+
+
+==== Numéricas
+
+XPath incluye algunas funciones numéricas simples para sumar grupos de números y buscar el entero más cercano a un número. 
+
+===== number()
+
+La función number() puede aceptar cualquier tipo como argumento y lo convierte en un número. Si se omite el argumento, convierte el nodo de contexto. Los valores booleanos se convierten en 1 si son verdaderos y en O si son falsos. Las cadenas se convierten en un tipo verosímil. Por ejemplo, la cadena "7.5" se convertirá en el número 7.5.
+
+La cadena" Hola Mundo" se convertirá en NaN.
+
+===== ceiling() 
+
+Devuelve el redondeo de un número hacia arriba al valor entero más cercano o al siguiente entero más grande si el número original ya es decimal.
+
+[EXAMPLE]
+====
+----
+ceiling(3.14) devuelve: 4
+----
+====
+
+===== floor()
+Devuelve el redondeo de un número hacia abajo al valor entero más cercano o al siguiente entero más pequeño si el número original ya es decima
+
+[EXAMPLE]
+====
+----
+floor(3.14) devuelve: 3
+----
+====
+
+===== round()
+Devuelve su argumento redondeado al entero más cercano.
+
+[EXAMPLE]
+====
+----
+round(3.14) devuelve: 3
+round(1.5) devuelve:2
+----
+====
+
+===== sum()
+
+Toma un conjunto de nodos como argumento y devuelve la suma de los valores numéricos contenidos en esos nodos.
+
+==== Conjunto de nódulos
+Las funciones de conjunto de nodos operan sobre o devuelven información sobre conjuntos de nodos, es decir, sobre las colecciones de nodos de XPath.
+
+===== position()
+Devulve la posición en la lista de nodos, del nodo que se esté procesando en cada momento.
+
+===== last() y count()
+La función *last()* devuelve la posición del último nodo dentro de su contexto. Es útil cuando necesitas saber la cantidad total de nodos en un contexto.
+
+La función *count()* devuelve el número de nodos que cumplen con una expresión XPath dada. Puedes usarla para contar los nodos que cumplan con ciertos criterios.
+
+[EXAMPLE]
+====
+----
+count//name() devuelve el número de elementos name en el documento.
+----
+====
+
+===== id()
+
+Toma un valor de ID como argumento y devuelve los elementos con ese ID. Es una forma de seleccionar elementos de manera eficiente utilizando su ID único. Estos son atributos declarados para tener el tipo ID en la DTD, no necesariamente atributos denominados ID o id. (Debe existir una DTD para que funcione id())
+
+
+===== name()
+Devuelve el nombre de un nodo específico de la forma: cadena-name (nodo)
+
+===== namespace-uri()
+Devuelve el espacio de nombres de la URI de un nodo específico: uri=namespaceuri(nodo)
+
+===== local-name()
+Devuelve el nombre local del nodo actual, es decir, el nombre del nodo sin el prefijo de espacio de nombres.
+
+En las tres funciones anteriores, el argumento se puede omitir, en cuyo caso se evalúa el espacio de nombre del nodo de contexto
+
+==== String
+===== string()
+Convierte un argumento de cualquier tipo en una cadena de caracteres. Los booleanos se convierten en las cadenas *"true"* o *"false"*. Los conjuntos de nodos se convierten en el valor de la cadena del primer nodo en el conjunto
+
+*cadena-string(valor)*
+
+[EXAMPLE]
+====
+----
+string(314) devuelve: '314'
+----
+====
+
+===== concat()
+Devuelve la concatenación de todos los argumentos sobre los que actúa.
+
+*cadena concat (valor1, valor2, ..)*
+
+[EXAMPLE]
+====
+----
+concat ('El',','XML') devuelve: 'EL XML'
+----
+====
+
+===== starts-with()
+Se utiliza para verificar si una cadena comienza con un determinado prefijo. Esta función toma dos argumentos: la cadena en la que deseas verificar el prefijo y el prefijo que estás buscando. Devuelve un valor booleano (*true* o *false*) según si la cadena comienza con el prefijo especificado
+
+[EXAMPLE]
+====
+----
+starts-with("Richard', 'Ric') es verdadero,
+starts-with('Richard', 'Rick') es falso.
+----
+====
+
+No existe una función *ends-with()* correspondiente.
+
+===== contains()
+
+Acepta dos argumentos de cadena. Devuelve true si el prime argumento contiene el segundo argumento, es decir, si el segundo argumento es una subcadena del primer argumento, independientemente de la posición.
+
+[EXAMPLE]
+====
+----
+contains("Richard", "ar") es verdadero
+contains("Richard","art") es falso
+----
+====
+
+===== substring-before()
+Se utiliza para extraer una subcadena de una cadena original antes de una ocurrencia específica de otra subcadena. Esta función toma dos argumentos: la cadena original y la subcadena que se usará como punto de referencia para dividir la cadena original. Devuelve la parte de la cadena original que está antes de la primera aparición de la subcadena de referencia.
+
+[EXAMPLE]
+====
+----
+substring-before("MM/DD/YYYY","/") es MM.
+----
+====
+
+===== substring-after()
+Se utiliza para extraer una subcadena de una cadena original después de una ocurrencia específica de otra subcadena. Esta función toma dos argumentos: la cadena original y la subcadena que se usará como punto de referencia para dividir la cadena original. Devuelve la parte de la cadena original que está después de la primera aparición de la subcadena de referencia.
+
+[EXAMPLE]
+====
+----
+substring-before("MM/DD/YYYY","/") es DD/YYYY.
+substring-before(substring-after("MM/DD/YYYY","/"),"/") es DD
+substring-after (substring-after("MM/DD/YYYY","/"), "/") es YYYY.
+----
+====
+
+===== substring
+Se puede usar si conocemos la posición de una cadena dentro de otra. Este método acepta tres argumentos: 
+- La cadena desde la que se va a copiar la subcadena
+- La posición en la cadena desde la que se va a iniciar la extracción 
+- El número de caracteres a copiar para la subcadena. El tercer argumento se puede omitir, en cuyo caso la subcadena contendrá todos los caracteres desde la posición inicial especificada hasta el final de la cadena.
+
+[EXAMPLE]
+====
+----
+substring("MM/DD/YYYY',1,2) es MM.
+substring('MM/DD/YYYY',4,2) es DD.
+substring(MM/DD/YYYY', 7) es YYYY.
+----
+====
+
+===== string-length()
+Devuelve un número con la longitud de la cadena de su argumento o el nodo de contexto, si no se incluye ningún argumento.
+
+[EXAMPLE]
+====
+----
+string-length("Hola Mundo")es 10
+----
+====
+
+===== translate()
+Efectúa un reemplazo carácter a carácter del primer argumento (valor) de forma que tras examinar el valor del argumento del segundo argumento (cad1) reemplaza c carácter por el carácter que aparece en la misma posición de (cad2) de la forma:
+
+*cadena=translate(valor,cad1,cad2)*
+
+[EXAMPLE]
+====
+----
+translate(12:30, '30, '45') da como resultado'12:45'
+----
+====
+
+
+== XLink
+XML Linking Language (XLink) es un estándar del World Wide Web Consortium (W3C) que se utiliza para describir enlaces hipermedia en documentos XML. XLink extiende las capacidades de XML al proporcionar una manera estructurada y más flexible de crear enlaces entre recursos en documentos XML. A continuación, se presenta una visión general de XLink y sus características clave:
+
+=== Enlaces más ricos
+XLink permite la creación de enlaces más ricos y complejos en comparación con los enlaces simples de HTML. Puede describir enlaces unidireccionales y bidireccionales, múltiples destinos, enlaces con etiquetas, enlaces de arco (arc links) para modelar relaciones complejas, y más.
+
+=== Recursos y enlaces
+En XLink, los documentos XML contienen elementos que representan recursos y elementos que representan enlaces entre esos recursos. Los enlaces conectan recursos, lo que permite la navegación y la relación de datos de una manera más estructurada.
+
+=== Atributos clave
+XLink introduce atributos clave que se utilizan para definir enlaces. Algunos de los atributos más importantes son:
+
+* xlink:href: Especifica la dirección o identificador del recurso de destino.
+* xlink:type: Indica el tipo de enlace, como simple o extendido.
+* xlink:show y xlink:actuate: Controlan cómo se debe mostrar y activar el recurso vinculado.
+
+=== Tipos de enlace
+XLink admite varios tipos de enlaces, incluyendo enlaces simples, enlaces de arco, enlaces extendidos y enlaces multidireccionales. Esto permite modelar relaciones complejas y contextos de vinculación variados.
+
+=== Compatibilidad con otros estándares
+XLink se puede utilizar en combinación con otros estándares XML, como XPointer (para identificar partes específicas de un recurso) y XInclude (para incluir fragmentos de documentos XML en otros documentos).
+
+=== Aplicaciones
+XLink es útil en una variedad de contextos, como la creación de hipervínculos en documentos XML, la vinculación de datos entre documentos, la gestión de metadatos y la creación de documentos semánticos más estructurados.
+
+
+== XPointer
+
+XPointer es un estándar del World Wide Web Consortium (W3C) que se utiliza para identificar partes específicas de un documento XML o fragmentos de datos dentro de un documento XML más grande. A continuación, se presenta una visión general de XPointer y sus características clave:
+
+=== Sintaxis de XPointer
+XPointer define una sintaxis que se utiliza para especificar las ubicaciones de los fragmentos de datos dentro de un documento XML. Esto incluye expresiones para seleccionar elementos, atributos y otros nodos XML.
+
+=== Tipos de XPointer
+XPointer admite varios tipos de punteros, como punteros de rango (para seleccionar un rango de nodos), punteros de identificación (para seleccionar nodos por su identificador) y punteros de contexto (para seleccionar nodos relativos a un contexto dado).
+
+=== Compatibilidad con XPath
+XPointer se basa en XPath, otro estándar para la navegación y selección de nodos en documentos XML. Esto significa que XPointer puede aprovechar la potencia de XPath para expresar consultas complejas.
+
+=== Aplicaciones de XPointer
+XPointer se utiliza en diversas aplicaciones, como la fragmentación de documentos XML para su procesamiento, la vinculación a partes específicas de un documento y la recuperación de datos específicos de un documento XML.
+
+
+
+
+
+== XQL
+
+XQL (XML Query Language) es un lenguaje de consulta diseñado para la búsqueda y recuperación de datos en documentos XML. A continuación, se presenta una visión general de XQL y sus características clave:
+
+=== Sintaxis de XQL
+XQL define una sintaxis que se utiliza para expresar consultas y filtros para seleccionar datos específicos de documentos XML. Esto incluye la capacidad de seleccionar elementos, atributos y contenido de texto dentro de documentos XML.
+
+=== Operadores y Funciones en XQL
+XQL proporciona un conjunto de operadores y funciones que se pueden utilizar en las consultas para realizar operaciones de filtrado, búsqueda y manipulación de datos en documentos XML.
+
+=== Compatibilidad con XPath
+XQL se basa en XPath, otro lenguaje para la navegación y selección de datos en documentos XML. Esto significa que XQL hereda muchas de las capacidades de XPath y agrega funcionalidades adicionales para consultas más avanzadas.
+
+=== Aplicaciones de XQL
+XQL se utiliza en una variedad de aplicaciones, incluyendo la búsqueda y extracción de datos de documentos XML, la generación de informes basados en XML y la manipulación de contenido XML en sistemas de gestión de bases de datos y motores de búsqueda.
+
+
+

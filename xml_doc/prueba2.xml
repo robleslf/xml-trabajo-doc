@@ -1,0 +1,43 @@
+<!DOCTYPE academia[
+<!ENTITY % persona "(#PCDATA)">
+
+<!ELEMENT persona ()>
+<!ELEMENT academia (director, docente, alumno)>
+<!ELEMENT director % persona;>
+<!ELEMENT docente % persona;>
+<!ELEMENT alumno % persona;>
+]>
+
+<academia>
+
+   <director>
+   
+      <nombre> Antonio </nombre>
+      
+      <apellidos>Pérez López </apellidos>
+      
+      <localidad> Granada </localidad>
+   
+   </director>
+   
+   <docente>
+   
+      <nombre> Juana </nombre>
+      <localidad> Granada </localidad>
+
+      <apellidos>López Rosales</apellidos> <telefono>952 33 44 55</telefono> 
+   </docente>
+   
+   <alumno>
+   
+      <nombre> Luis Alberto</nombre>
+      
+      <apellidos>Molina Peña</apellidos>
+      
+      <localidad>Murcia</localidad>
+      
+      <cp>29012</cp>
+   
+   </alumno>
+   
+</academia>

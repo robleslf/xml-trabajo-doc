@@ -1,0 +1,861 @@
+== Aplicaciones del lenguaje XML
+
+=== XHTML
+
+**XHTML (Extensible Hypertext Markup Language)** es un lenguaje de marcado que se utiliza para crear y estructurar contenido en la web. Es una reformulación del lenguaje HTML clásico, diseñada para seguir las reglas estrictas del XML (Extensible Markup Language). La transición de HTML a XHTML se realizó para garantizar una mayor coherencia, interoperabilidad y conformidad con los estándares web.
+
+
+[NOTE]
+====
+A lo largo de su evolución, XHTML ha tenido varias versiones importantes; la última es la versión HTML 5
+====
+
+
+En cuanto a la estructura básica de un documento XHTML, es muy similar a la de un documento HTML:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Título del documento</title>
+  <!-- Aquí se colocan las metainformación y enlaces a archivos externos -->
+</head>
+<body>
+  <!-- Contenido visible para los usuarios -->
+</body>
+</html>
+```
+
+Algunos aspectos clave a tener en cuenta en esta estructura son:
+
+- **XML Prolog:** La primera línea declara la versión de XML y la codificación utilizada en el documento.
+- **Document Type Declaration (DTD):** Define la versión y el tipo de documento XHTML que se está utilizando.
+- **html:** El elemento raíz del documento, que encierra todo el contenido.
+- **head:** Contiene información del encabezado del documento, como el título y enlaces a hojas de estilo y otros recursos.
+- **body:** Contiene el contenido visible para los usuarios, como texto, imágenes y otros elementos.
+
+Aunque la adopción de XHTML no llegó a ser tan masiva como la de HTML5, muchos de los conceptos y las reglas de sintaxis de XHTML influyeron en el desarrollo de las futuras especificaciones de HTML y en la forma en que se estructura el contenido web moderno.
+
+Todos los documentos XHTML deben ajustarse a los siguientes puntos:
+
+- Deben poder validarse con alguna de las tres siguientes DTDs:
+
+* XHTML -1.0-Strict
+* XHTML-1.0-Transitional
+XHTML-1.0-Frameset
+
+- El elemento raíz del documento debe ser <html>
+
+- Todo el código debe ir en minúsculas
+
+- Es obligatorio cerrar todas las etiquetas
+
+- El elemento raíz del documento debe indicar en el atributo xmlns el espacio de nombres de XHTML:
+
+[source, xhtml]
+----
+<html xmlns="http://www.w3.org/1999/xhtml"
+----
+
+- Debe haber una declaración DOCTYPE en el documento antes del elemento raíz.
+
+==== Lenguaje de etiquetas
+
+Al ser hijo de XML, se escribe en forma de etiquetas:
+
+[source, xhtml]
+----
+<etiqueta>contenido</etiqueta>
+----
+
+==== Comentarios
+
+[source, xhtml]
+----
+<!-- Este es un comentario en XHTML -->
+----
+
+==== Contenido de <head>
+
+El bloque <head> contiene información sobre el documento y enlaces a recursos externos que afectan su presentación y comportamiento.
+
+* Título (<title>):
+El elemento <title> se encuentra dentro del bloque <head> y define el título del documento. Este título se muestra en la barra de título del navegador y se utiliza cuando los usuarios guardan la página como marcador. También es importante para el SEO, ya que los motores de búsqueda a menudo utilizan el contenido del título para comprender el tema del documento.
+
+[source, xhtml]
+----
+<head>
+    <title>Mi Sitio Web</title>
+</head>
+----
+
+* Icono de la Página (<link rel="icon">):
+El icono de la página, también conocido como "favicon", es una pequeña imagen que se muestra en la pestaña del navegador y en la lista de marcadores. Se especifica en el bloque <head> usando el elemento <link> con el atributo rel establecido en "icon".
+
+[source, xhtml]
+----
+<head>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+----
+
+* Enlaces a Hojas de Estilos (<link rel="stylesheet">):
+Los enlaces a hojas de estilos CSS se utilizan para aplicar estilos al contenido del documento. Se insertan en el bloque <head> utilizando el elemento <link> con el atributo rel establecido en "stylesheet" y el atributo href que apunta al archivo CSS externo.
+
+[source, xhtml]
+----
+<head>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+----
+
+*  Enlaces a Ficheros de Scripts (<script>):
+Los enlaces a ficheros de scripts, generalmente JavaScript, se utilizan para agregar interactividad y funcionalidad al documento. Pueden colocarse en el bloque <head> o al final del cuerpo (<body>) para optimizar la carga de la página. Se utiliza el elemento <script> con el atributo src para especificar la ubicación del archivo JavaScript externo.
+
+[source, xhtml]
+----
+<head>
+    <script src="script.js"></script>
+</head>
+----
+
+* Etiquetas de Metainformación (<meta>):
+Las etiquetas <meta> se utilizan para proporcionar metadatos sobre el documento. Pueden incluir información como la codificación de caracteres, la descripción del contenido, las palabras clave relevantes y la autoría. Estas etiquetas no tienen un impacto directo en la presentación visual, pero son útiles para motores de búsqueda y para la accesibilidad.
+
+[source, xhtml]
+----
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Mi sitio web personal">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="author" content="Tu Nombre">
+</head>
+----
+
+
+==== Conjunto de caractéres utilizados en la página
+
+Al igual que en XML, hay que indicar el conjunto de caracteres:
+
+[source, xhtml]
+----
+<head>
+    <meta charset="UTF-8">
+    <!-- Otros elementos del encabezado -->
+</head>
+----
+
+==== Metas de posicionamiento SEO
+
+Las etiquetas meta en un documento HTML son elementos que proporcionan metainformación sobre la página web y su contenido. Algunas de estas etiquetas tienen un impacto en el posicionamiento en los motores de búsqueda y en la optimización para los motores de búsqueda (SEO). Algunas de las etiquetas meta más importantes relacionadas son:
+
+- Meta Descripción (<meta name="description">): se utiliza para proporcionar una breve descripción del contenido de la página. Esta descripción a menudo se muestra en los resultados de búsqueda de los motores de búsqueda.
+
+[source, xhtml]
+----
+<meta name="description" content="Una descripción concisa y relevante de tu página.">
+----
+
+Meta Palabras Clave (<meta name="keywords">): los motores de búsqueda modernos les dan menos importancia. Sin embargo, aún se usa esta etiqueta para incluir algunas palabras clave relevantes para el contenido.
+
+[source, xhtml]
+----
+<meta name="keywords" content="palabra clave 1, palabra clave 2, palabra clave 3">
+----
+
+Meta Autor (<meta name="author">): no tiene un impacto directo en el SEO, puede ser útil para la atribución de su autor y su credibilidad.
+
+[source, xhtml]
+----
+<meta name="author" content="Nombre del autor">
+----
+
+Meta Robots (<meta name="robots">): permite controlar cómo los motores de búsqueda indexan y muestran la página. Los valores comunes para el atributo content son "index" (permitir indexación), "nofollow" (no seguir los enlaces en la página), "noindex" (no indexar la página) y "noarchive" (no almacenar en caché la página).
+
+[source, xhtml]
+----
+<meta name="robots" content="index, follow">
+----
+
+Meta Canonical (<link rel="canonical">): se utiliza para indicar la URL preferida cuando hay múltiples URLs que muestran contenido similar. Esto ayuda a evitar problemas de contenido duplicado en el SEO.
+
+[source, xhtml]
+----
+<link rel="canonical" href="URL-preferida">
+----
+
+==== Notaciones de color
+
+Se utilizan notaciones de color para definir los colores que se aplicarán a elementos en una página web. Los colores se pueden especificar utilizando diferentes formatos, como nombres de color, códigos hexadecimales y valores RGB.
+
+* Nombres de Color:
+XHTML admite una serie de nombres de color predefinidos que representan colores comunes. Por ejemplo, "red" (rojo), "blue" (azul), "green" (verde), etc. Sin embargo, la cantidad de nombres de color es limitada y no incluye todas las variaciones posibles.
+
+[source, xhtml]
+----
+<p style="color: red;">Este texto es rojo.</p>
+<p style="color: blue;">Este texto es azul.</p>
+----
+
+* Códigos Hexadecimales:
+Los códigos hexadecimales son una forma más precisa y flexible de especificar colores. Consisten en un símbolo "#" seguido por seis caracteres hexadecimales (0-9 y A-F) que representan los valores de los componentes rojo, verde y azul (RGB) del color.
+
+[source, xhtml]
+----
+<p style="color: #FF5733;">Este texto es de color naranja intenso.</p>
+<p style="color: #3498DB;">Este texto es de color azul claro.</p>
+----
+
+* Valores RGB:
+Los valores RGB (rojo, verde y azul) permiten especificar los niveles de los componentes de color directamente. Cada componente se define con un valor entre 0 y 255.
+
+[source, xhtml]
+----
+<p style="color: rgb(255, 99, 71);">Este texto es de color "tomato" usando valores RGB.</p>
+<p style="color: rgb(52, 152, 219);">Este texto es de color "peter river" usando valores RGB.</p>
+----
+
+==== Formato de texto
+
+===== Encabezados
+los encabezados son elementos de texto que se utilizan para resaltar la estructura y jerarquía del contenido en una página web. Los encabezados van desde <h1> hasta <h6>, donde <h1> es el encabezado más importante y <h6> es el menos importante. Los encabezados son importantes tanto para la organización del contenido como para la optimización para motores de búsqueda y la accesibilidad. 
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<h1>Este es un título principal</h1>
+----
+====
+
+
+[NOTE]
+====
+El encabezado de nivel 1 (<h1>) es el encabezado principal de la página. Se utiliza para el título principal del contenido y debe ser único en cada página. Los motores de búsqueda y las tecnologías de asistencia dan una gran importancia a este encabezado.
+====
+
+===== Párrafos
+
+Los párrafos se crean utilizando la etiqueta <p>, que indica al navegador que el contenido dentro de ella forma un párrafo coherente y separado. Los párrafos ayudan a organizar y dividir el contenido en bloques legibles y comprensibles. 
+
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<p>Este es un ejemplo de un párrafo. Los párrafos se utilizan para agrupar un conjunto coherente de frases o ideas.</p>
+
+<p>Este es otro párrafo independiente que presenta información adicional. Cada párrafo se muestra en una línea separada por defecto.</p>
+----
+====
+
+===== Salto de línea
+El salto de línea se logra utilizando la etiqueta <br>. Esta etiqueta se utiliza para crear un salto de línea dentro de un bloque de texto sin comenzar un nuevo párrafo. A diferencia de los párrafos, que representan bloques coherentes de contenido, la etiqueta <br> simplemente provoca un salto de línea en el lugar donde se encuentra.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<p>Este es un ejemplo de un párrafo. Los párrafos se utilizan para agrupar un conjunto coherente de frases o ideas.</p>
+
+<p>Este es otro párrafo independiente que presenta información adicional. Cada párrafo se muestra en una línea separada por defecto.</p>
+----
+====
+
+===== Fuente
+En XHTML se puede controlar la apariencia del texto, incluida la fuente, utilizando propiedades de estilo CSS.
+
+
+===== Línea horizonatal
+Se puede insertar una línea horizontal para separar secciones de contenido utilizando la etiqueta <hr>. Esta etiqueta crea una línea horizontal que se extiende a lo ancho del contenedor en el que se encuentra. La línea horizontal puede ser utilizada para mejorar la legibilidad y la organización del contenido, dividiendo visualmente distintas secciones.
+
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<p>Este es el contenido de la primera sección.</p>
+<hr>
+<p>Este es el contenido de la segunda sección, separada por una línea horizontal.</p>
+----
+====
+
+===== Otras etiquetas
+
+- *<center>:* centra el texto
+- *<b>:* negrita
+- *<i>:* cursiva
+- *<u>:* subrayado
+- *<s><strike>:* tachado
+- *<sup>:* superíndice
+- *<sub>:* subíndice
+
+
+===== Texto citado
+
+La etiqueta <blockquote> se utiliza en XHTML para crear un bloque de texto citado, comúnmente utilizado para citar fragmentos de texto de otras fuentes. La sangría es una característica típica de los bloques de citas, y la etiqueta <blockquote> suele aplicar automáticamente una sangría en el contenido citado. 
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<blockquote>
+  <p>Este es un ejemplo de texto citado. La etiqueta &lt;blockquote&gt; crea una sangría en el contenido.</p>
+  <p>El contenido citado se suele destacar visualmente del resto del texto.</p>
+</blockquote>
+----
+====
+
+==== Enlaces de hipertexto
+Los enlaces de hipertexto, también conocidos como hipervínculos o simplemente enlaces, son elementos que permiten a los usuarios navegar de una página a otra o acceder a diferentes recursos en la web. Los enlaces son una parte fundamental de la navegación y la interacción en la web, y se crean utilizando la etiqueta <a>. 
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<a href="https://www.ejemplo.com" target="_blank">Abrir en nueva pestaña</a>
+----
+====
+
+
+* Enlaces Internos:
+Los enlaces internos son aquellos que apuntan a páginas o secciones dentro del mismo sitio web. Se utilizan para navegar a diferentes partes de un sitio web sin abandonar el dominio. Estos enlaces se crean utilizando rutas relativas o absolutas dentro del mismo dominio.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<a href="/pagina-interna">Ir a la página interna</a>
+<a href="#seccion">Ir a la sección</a>
+----
+====
+
+* Enlaces Locales:
+Los enlaces locales son un tipo específico de enlaces internos que apuntan a recursos dentro del mismo dominio. Estos enlaces no contienen la URL completa, solo la ruta relativa al recurso.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<a href="/imagenes/imagen.jpg">Ver imagen local</a>
+<a href="/documentos/documento.pdf">Abrir documento local</a>
+----
+====
+
+* Enlaces Remotos:
+Los enlaces remotos son enlaces que apuntan a recursos en dominios externos al tuyo. Estos enlaces permiten a los usuarios acceder a contenido en otros sitios web.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<a href="https://www.otro-sitio.com">Visitar otro sitio web</a>
+----
+====
+
+* Enlaces con Direcciones de Correo:
+Los enlaces con direcciones de correo electrónico permiten a los usuarios enviar correos electrónicos directamente al hacer clic. Se crean utilizando el protocolo "mailto:" seguido de la dirección de correo.
+
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<a href="mailto:correo@example.com">Enviar correo</a>
+----
+====
+
+* Enlaces con Archivos:
+Los enlaces con archivos permiten a los usuarios acceder y descargar diferentes tipos de archivos, como documentos, imágenes, audios, videos, entre otros.
+
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<a href="documento.pdf">Ver documento PDF</a>
+<a href="imagen.jpg">Ver imagen</a>
+<a href="audio.mp3">Escuchar audio</a>
+----
+====
+
+==== Atributos, listas, tablas
+
+* Atributo nofollow en los Enlaces:
+El atributo nofollow se utiliza en los enlaces para indicar a los motores de búsqueda que no sigan el enlace y no lo tengan en cuenta para propósitos de clasificación. Esto es comúnmente utilizado en enlaces a contenido patrocinado, comentarios de usuarios y otros enlaces que no deseas que influyan en el SEO.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<a href="https://www.ejemplo.com" rel="nofollow">Enlace sin seguimiento</a>
+----
+====
+
+
+* Imágenes y Atributo src:
+Las imágenes se insertan en una página web utilizando la etiqueta <img>, y el atributo src se utiliza para especificar la URL de la imagen.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<img src="imagen.jpg" alt="Descripción de la imagen">
+----
+====
+
+* Atributo alt en Imágenes:
+El atributo alt se utiliza en las imágenes para proporcionar una descripción textual de la imagen. Esto es importante para la accesibilidad y para que los motores de búsqueda comprendan el contenido de la imagen.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<img src="imagen.jpg" alt="Un hermoso paisaje de montañas">
+----
+====
+
+* Atributos height y width en Imágenes:
+Los atributos height y width se utilizan para especificar la altura y el ancho de una imagen en píxeles. Esto puede ayudar a controlar el espacio ocupado por la imagen en la página y mejorar el rendimiento de carga.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<img src="imagen.jpg" alt="Descripción" width="300" height="200">
+----
+====
+
+* Atributo border en Imágenes:
+El atributo border se utilizaba anteriormente para agregar un borde a las imágenes, pero en la actualidad se prefiere utilizar CSS para lograr este efecto.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<img src="imagen.jpg" alt="Descripción" border="1">
+----
+====
+
+* Atributos vspace y hspace en Imágenes:
+Los atributos vspace y hspace solían usarse para definir el espacio vertical y horizontal alrededor de una imagen. Al igual que el atributo border, es preferible utilizar CSS para el espaciado.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<img src="imagen.jpg" alt="Descripción" vspace="10" hspace="10">
+----
+====
+
+* Listas:
+XHTML admite listas ordenadas <ol> (numeradas) y listas no ordenadas <ul> (viñetas), que contienen elementos de lista <li>. Las listas son útiles para organizar elementos en una estructura jerárquica.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<ul>
+  <li>Elemento 1</li>
+  <li>Elemento 2</li>
+  <li>Elemento 3</li>
+</ul>
+
+<ol>
+  <li>Primer paso</li>
+  <li>Segundo paso</li>
+  <li>Tercer paso</li>
+</ol>
+----
+====
+
+* Tablas:
+Las tablas se crean utilizando las etiquetas <table> para la tabla en sí, <tr> para las filas y <td> para las celdas. Las tablas son útiles para organizar datos en filas y columnas.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table>
+  <tr>
+    <td>Celda 1,1</td>
+    <td>Celda 1,2</td>
+  </tr>
+  <tr>
+    <td>Celda 2,1</td>
+    <td>Celda 2,2</td>
+  </tr>
+</table>
+----
+====
+
+==== Atributos de tabla
+
+Atributo align:
+El atributo align solía usarse para alinear una tabla horizontalmente dentro de su contenedor. Sin embargo, su uso ha quedado obsoleto en favor de las propiedades de estilo CSS para el diseño.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table align="center">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+
+Atributo frame:
+El atributo frame se utilizaba para especificar los bordes que rodean la tabla. Sus valores incluyen "void" (sin bordes), "above" (bordes arriba), "below" (bordes abajo), "hsides" (bordes horizontales), "vsides" (bordes verticales) y "box" (bordes en caja).
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table frame="above">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Atributo rules:
+El atributo rules definía las reglas que determinaban cómo se mostraban los bordes internos de las celdas de la tabla. Sus valores incluyen "none" (sin reglas), "groups" (reglas entre grupos de filas o columnas), "rows" (reglas entre filas) y "cols" (reglas entre columnas).
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table rules="rows">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Atributo background:
+El atributo background permitía establecer una imagen de fondo para la tabla. Sin embargo, es preferible usar CSS para definir fondos en la actualidad.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table background="fondo.jpg">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Atributo bgcolor:
+El atributo bgcolor se usaba para establecer el color de fondo de la tabla. También es preferible usar CSS para aplicar colores de fondo.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table bgcolor="#EFEFEF">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Atributo border:
+El atributo border se usaba para definir el grosor del borde de la tabla. Este atributo es obsoleto, y el estilo de borde se establece mejor mediante CSS.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table border="1">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Atributo bordercolor:
+El atributo bordercolor se utilizaba para definir el color del borde de la tabla. Es preferible usar CSS para controlar el color del borde.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table border="1" bordercolor="#000000">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Atributo cellpadding:
+El atributo cellpadding establecía el espacio entre el contenido de las celdas y los bordes de las celdas.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table cellpadding="5">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Atributo cellspacing:
+El atributo cellspacing definía el espacio entre las celdas de la tabla.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table cellspacing="10">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Atributo height y width (Altura y Ancho):
+Estos atributos se utilizan para definir la altura y el ancho de la tabla.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table width="400" height="200">
+  <!-- Contenido de la tabla -->
+</table>
+----
+====
+
+Elemento <tbody>:
+El elemento <tbody> se utiliza para agrupar las filas de la tabla y definir el cuerpo principal de la tabla.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table>
+  <tbody>
+    <tr>
+      <td>Celda 1</td>
+      <td>Celda 2</td>
+    </tr>
+    <tr>
+      <td>Celda 3</td>
+      <td>Celda 4</td>
+    </tr>
+  </tbody>
+</table>
+----
+====
+
+Elemento <colgroup>:
+El elemento <colgroup> se utiliza para agrupar y definir atributos de columnas en una tabla. Esto permite aplicar estilos y propiedades a múltiples columnas a la vez.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table>
+  <colgroup>
+    <col style="background-color: #F2F2F2;">
+    <col span="2" style="background-color: #CCCCCC;">
+  </colgroup>
+  <tr>
+    <td>Columna 1</td>
+    <td>Columna 2</td>
+    <td>Columna 3</td>
+  </tr>
+</table>
+----
+====
+
+Atributos de <tr> (Fila de la tabla):
+Los atributos para la etiqueta <tr> son limitados y generalmente no se utilizan ampliamente. En su lugar, se aplican estilos CSS para controlar la apariencia de las filas
+
+
+Atributos de <td> y <th> (Celdas de la tabla):
+Las celdas de la tabla, tanto <td> (celdas regulares) como <th> (celdas de encabezado), pueden recibir varios atributos, incluyendo colspan (fusionar columnas), rowspan (fusionar filas), headers (asociación con encabezados), etc.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table>
+  <tr>
+    <th colspan="2">Encabezado</th>
+  </tr>
+  <tr>
+    <td>Contenido 1</td>
+    <td>Contenido 2</td>
+  </tr>
+</table>
+----
+====
+
+
+Tablas Anidadas:
+Las tablas anidadas son tablas que se encuentran dentro de otras tablas. Si bien pueden ser útiles en ciertos casos, se debe evitar su uso excesivo, ya que pueden complicar la estructura de la página y causar problemas de accesibilidad.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<table>
+  <tr>
+    <td>
+      <table>
+        <tr>
+          <td>Tabla Anidada</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+----
+====
+
+==== Formularios:
+Los formularios permiten a los usuarios enviar datos al servidor. Se crean utilizando la etiqueta <form>. Los elementos dentro del formulario pueden ser campos de entrada, botones, selectores, etc.
+
+
+
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<form action="procesar.php" method="post">
+  <!-- Campos de entrada y otros elementos -->
+  <input type="text" name="nombre">
+  <input type="submit" value="Enviar">
+</form>
+----
+====
+
+
+Campos de Texto:
+Los campos de texto permiten a los usuarios ingresar texto. Se crean utilizando la etiqueta <input> con el atributo type="text".
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<input type="text" name="nombre">
+----
+====
+
+Campos de Texto Oculto:
+Los campos de texto oculto son campos que no son visibles para el usuario, pero pueden llevar información importante. Se utilizan para enviar datos en segundo plano.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<input type="hidden" name="codigo" value="123">
+----
+====
+
+Campos de Área de Texto:
+Los campos de área de texto permiten a los usuarios ingresar múltiples líneas de texto. Se crean utilizando la etiqueta <textarea>.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<textarea name="comentarios" rows="4" cols="50"></textarea>
+----
+====
+
+
+Botones de Radio:
+Los botones de radio permiten a los usuarios seleccionar una opción de un conjunto de opciones mutuamente excluyentes. Se crean utilizando la etiqueta <input> con el atributo type="radio".
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<input type="radio" name="opcion" value="opcion1"> Opción 1
+<input type="radio" name="opcion" value="opcion2"> Opción 2
+<input type="radio" name="opcion" value="opcion3"> Opción 3
+----
+====
+
+El atributo name agrupa los botones de radio para que solo una opción pueda ser seleccionada a la vez.
+
+Botones:
+Los botones permiten a los usuarios realizar acciones en un formulario. Pueden ser botones de envío, botones de reinicio o botones personalizados. Se crean utilizando la etiqueta <input> con el atributo type="button" o type="submit".
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<input type="submit" value="Enviar">
+<input type="button" value="Hacer clic">
+----
+====
+
+Campos Hidden (Ocultos):
+Los campos ocultos son campos de entrada que no son visibles para el usuario, pero pueden llevar datos importantes. Se utilizan para enviar información al servidor sin mostrarla al usuario.
+
+[EXAMPLE]
+====
+[source, xhtml]
+----
+<input type="hidden" name="identificador" value="12345">
+<input type="hidden" name="accion" value="actualizar">
+----
+====
+
+=== REST
+
+REST, que significa Representational State Transfer (Transferencia de Estado Representacional), es un estilo arquitectónico para el diseño de sistemas de software distribuidos en la web. Fue propuesto por Roy Fielding en su tesis doctoral en 2000 y se convirtió en un enfoque ampliamente adoptado para construir servicios web y APIs.
+
+En el contexto de la programación y el desarrollo web, REST es un conjunto de principios y restricciones que definen cómo deben interactuar los componentes de un sistema distribuido, como aplicaciones web y servidores. A continuación, se describen algunos conceptos clave asociados con REST:
+
+Recursos:
+En REST, todo es considerado un recurso, que puede ser cualquier cosa que pueda ser identificada mediante una URL. Por ejemplo, una imagen, un usuario, una publicación en un blog, etc.
+
+Operaciones CRUD:
+REST se basa en las operaciones CRUD (Crear, Leer, Actualizar y Borrar). Cada recurso se puede manipular mediante estas operaciones básicas utilizando los métodos HTTP correspondientes:
+
+POST: Crear un nuevo recurso.
+GET: Leer un recurso existente.
+PUT: Actualizar un recurso existente.
+DELETE: Borrar un recurso existente.
+Interfaz Uniforme:
+REST promueve una interfaz uniforme para acceder a los recursos, utilizando principalmente las operaciones HTTP estándar (GET, POST, PUT, DELETE) y siguiendo los principios de uso de URLs y códigos de estado HTTP.
+
+Sin Estado:
+Cada solicitud del cliente al servidor debe contener toda la información necesaria para comprender y procesar la solicitud. El servidor no debe mantener ningún estado de sesión entre solicitudes.
+
+Capas:
+La arquitectura REST se puede implementar en capas, lo que significa que cada componente solo necesita conocer el componente con el que está interactuando directamente, sin necesidad de entender todo el sistema.
+
+Representaciones:
+Los recursos se representan de manera específica, como en formato XML, JSON o HTML. El cliente y el servidor pueden negociar el formato de representación.
+
+Estado Representacional:
+REST se basa en el concepto de transferir el estado representacional de un recurso entre el cliente y el servidor. Esto significa que el cliente debe saber cómo interpretar y mostrar la representación del recurso que recibe del servidor.
+
+=== SOAP
+
+SOAP, que significa Simple Object Access Protocol (Protocolo Simple de Acceso a Objetos), es otro protocolo ampliamente utilizado para el intercambio de información y la comunicación entre aplicaciones distribuidas en la web. A diferencia de REST, que se basa en el uso de los métodos HTTP estándar, SOAP utiliza su propio formato de mensaje y puede ser transportado sobre diversos protocolos, como HTTP, SMTP y más. Aquí hay una descripción de las características clave de SOAP:
+
+Estructura de Mensaje:
+En SOAP, los datos se empaquetan en mensajes XML estructurados. Un mensaje SOAP consiste en un encabezado y un cuerpo. El encabezado puede contener metadatos y la definición de acciones, mientras que el cuerpo contiene la información real que se va a intercambiar.
+
+Protocolo de Comunicación Independiente:
+Aunque SOAP se puede transportar sobre HTTP, también es posible utilizar otros protocolos, como SMTP, FTP y más. Esto le da a SOAP una mayor flexibilidad en términos de transporte.
+
+Operaciones:
+En SOAP, las operaciones se definen en términos de acciones. Cada mensaje SOAP lleva consigo una acción que describe la operación que debe llevarse a cabo.
+
+Estándares y Contratos:
+SOAP permite definir contratos estrictos entre el cliente y el servidor utilizando el lenguaje de descripción de servicios (WSDL, Web Services Description Language). WSDL describe la interfaz y los métodos disponibles en el servicio, lo que facilita la interoperabilidad entre diferentes sistemas.
+
+Seguridad y Autenticación:
+SOAP proporciona mecanismos para agregar capas de seguridad a las comunicaciones, como la autenticación y la encriptación, lo que es especialmente útil para garantizar la confidencialidad y la integridad de los datos transmitidos.
+
+Procesamiento Completo:
+SOAP puede ser más pesado en términos de procesamiento y ancho de banda debido a su estructura XML y la sobrecarga asociada. Sin embargo, esta estructura también permite manejar casos más complejos y aplicaciones empresariales que requieren una mayor definición de contrato.
+
+Flexibilidad en el Lenguaje:
+Aunque SOAP se originó en el contexto de la programación orientada a objetos, no está limitado a un lenguaje de programación específico y puede utilizarse con diferentes tecnologías.
